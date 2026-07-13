@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Site Admin — Darren James Hummel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      background: #f5f5f5;
+      color: #111;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    .admin-header {
+      background: #111;
+      color: #fff;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .admin-header h1 { font-size: 13px; font-weight: 600; letter-spacing: 0.03em; }
+    .admin-header .tagline { font-size: 11px; opacity: 0.5; margin-top: 2px; }
+    .header-actions { display: flex; gap: 10px; align-items: center; }
+
+    .btn {
+      padding: 8px 16px;
+      border-radius: 6px;
+      border: none;
+      font: 500 12px 'Inter', sans-serif;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .btn:hover { opacity: 0.8; }
+    .btn-primary { background: #fff; color: #111; }
+    .btn-export { background: #22c55e; color: #fff; }
+    .btn-danger { background: #ef4444; color: #fff; font-size: 11px; padding: 5px 10px; }
+    .btn-ghost { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
+    .btn-sm { padding: 5px 12px; font-size: 11px; background: #e5e7eb; color: #111; border-radius: 5px; border: none; cursor: pointer; }
+    .btn-sm:hover { background: #d1d5db; }
+    .btn-add { background: none; border: 1px dashed #ccc; color: #666; border-radius: 6px; padding: 8px 14px; font: 12px 'Inter', sans-serif; cursor: pointer; width: 100%; margin-top: 8px; }
+    .btn-add:hover { border-color: #999; color: #333; background: #f9f9f9; }
+
+    /* ── SAVED INDICATOR ── */
+    #save-status {
+      font-size: 11px;
+      color: #22c55e;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    #save-status.show { opacity: 1; }
+
+    /* ── TABS ── */
+    .tabs {
+      background: #fff;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      padding: 0 24px;
+    }
+    .tab-btn {
+      background: none;
+      border: none;
+      padding: 14px 18px;
+      font: 500 12px 'Inter', sans-serif;
+      color: #888;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+    }
+    .tab-btn.active { color: #111; border-bottom-color: #111; }
+    .tab-btn:hover:not(.active) { color: #444; }
+
+    /* ── CONTENT AREA ── */
+    .tab-content { display: none; padding: 24px; max-width: 860px; margin: 0 auto; }
+    .tab-content.active { display: block; }
+
+    /* ── CARDS ── */
+    .card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .card-header:hover { background: #fafafa; }
+    .card-title { font-weight: 600; font-size: 13px; flex: 1; }
+    .card-arrow { font-size: 10px; color: #999; transition: transform 0.2s; }
+    .card.open .card-arrow { transform: rotate(180deg); }
+    .card-body { display: none; padding: 16px; border-top: 1px solid #f0f0f0; }
+    .card.open .card-body { display: block; }
+
+    /* ── FORM FIELDS ── */
+    .field { margin-bottom: 14px; }
+    .field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 5px;
+    }
+    .field input[type="text"],
+    .field input[type="email"],
+    .field select,
+    .field textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      font: 13px 'Inter', sans-serif;
+      color: #111;
+      background: #fff;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus { border-color: #111; }
+    .field textarea { resize: vertical; min-height: 72px; line-height: 1.5; }
+    .field select { cursor: pointer; }
+    .field .hint { font-size: 11px; color: #999; margin-top: 4px; }
+
+    /* ── PARAGRAPH LIST ── */
+    .para-row {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+    .para-row textarea { flex: 1; }
+    .para-row .remove-btn {
+      background: none; border: none; color: #ccc; font-size: 16px;
+      cursor: pointer; padding: 6px; line-height: 1; flex-shrink: 0; margin-top: 2px;
+    }
+    .para-row .remove-btn:hover { color: #ef4444; }
+
+    /* ── MEDIA LIST ── */
+    .media-row {
+      background: #f9f9f9;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+    }
+    .media-row-top {
+      display: grid;
+      grid-template-columns: 110px 1fr auto;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .media-row-bottom {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .media-row-bottom label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      font-weight: 400;
+      color: #666;
+      text-transform: none;
+      letter-spacing: 0;
+      cursor: pointer;
+    }
+    .media-preview {
+      width: 48px;
+      height: 48px;
+      object-fit: cover;
+      border-radius: 4px;
+      display: block;
+      background: #eee;
+    }
+
+    /* ── GRID ITEMS ── */
+    .col-section { margin-bottom: 24px; }
+    .col-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #666;
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .grid-item-row {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      display: grid;
+      grid-template-columns: 60px 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+    .grid-item-preview {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 5px;
+      background: #eee;
+      display: block;
+    }
+    .grid-item-fields { display: flex; flex-direction: column; gap: 6px; }
+    .grid-item-row-inline {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 6px;
+      align-items: center;
+    }
+    .grid-item-row-inline label {
+      font-size: 11px;
+      color: #999;
+      font-weight: 500;
+    }
+    .grid-item-actions {
+      display: flex;
+      gap: 5px;
+      margin-top: 4px;
+    }
+
+    /* ── INFO PAGE ── */
+    .info-section { margin-bottom: 28px; }
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    /* ── MOVE BUTTONS ── */
+    .move-btn {
+      background: #f3f4f6;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      padding: 3px 7px;
+      font-size: 11px;
+      cursor: pointer;
+      color: #666;
+    }
+    .move-btn:hover { background: #e5e7eb; }
+
+    /* ── ADD NEW PROJECT AREA ── */
+    .add-project-area {
+      background: #fff;
+      border: 2px dashed #e5e7eb;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      color: #999;
+      margin-top: 8px;
+    }
+
+    /* ── SLUG HELPER ── */
+    .slug-preview { font-size: 11px; color: #888; margin-top: 4px; }
+    .slug-preview span { font-family: monospace; background: #f3f4f6; padding: 1px 5px; border-radius: 3px; }
+
+    /* ── INLINE INPUT MINI ── */
+    input.mini, select.mini {
+      padding: 4px 7px;
+      border: 1px solid #e5e7eb;
+      border-radius: 5px;
+      font: 12px 'Inter', sans-serif;
+      color: #111;
+      background: #fff;
+      outline: none;
+      width: 100%;
+    }
+    input.mini:focus, select.mini:focus { border-color: #111; }
+  </style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<div class="admin-header">
+  <div>
+    <div class="admin-header h1" style="font-size:13px;font-weight:600;letter-spacing:0.03em">Site Admin — Darren James Hummel</div>
+    <div class="tagline">Changes auto-save in your browser. Click Export when ready to deploy.</div>
+  </div>
+  <div class="header-actions">
+    <span id="save-status">✓ Saved</span>
+    <a href="index.html" target="_blank" class="btn btn-ghost">Preview Site ↗</a>
+    <button class="btn btn-export" onclick="exportData()">⬇ Export data.js</button>
+  </div>
+</div>
+
+<!-- ── TABS ── -->
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('projects')">Projects</button>
+  <button class="tab-btn" onclick="switchTab('grid')">Homepage Grid</button>
+  <button class="tab-btn" onclick="switchTab('info')">Info Page</button>
+</div>
+
+<!-- ── PROJECTS TAB ── -->
+<div class="tab-content active" id="tab-projects">
+  <div id="projects-list"></div>
+  <button class="btn-add" onclick="addProject()">+ Add New Project</button>
+</div>
+
+<!-- ── GRID TAB ── -->
+<div class="tab-content" id="tab-grid">
+  <p style="font-size:12px;color:#888;margin-bottom:20px">
+    Each thumbnail has a column (1, 2, or 3). Items in each column stack top-to-bottom in the order listed.
+    Use ↑ ↓ to reorder within a column, or change the Column number to move it.
+  </p>
+  <div id="grid-list"></div>
+  <button class="btn-add" onclick="addGridItem()">+ Add New Thumbnail</button>
+</div>
+
+<!-- ── INFO TAB ── -->
+<div class="tab-content" id="tab-info">
+  <div class="info-section">
+    <div class="section-title">Bio Paragraphs</div>
+    <div id="bio-list"></div>
+    <button class="btn-add" onclick="addBioParagraph()">+ Add Paragraph</button>
+  </div>
+  <div class="info-section">
+    <div class="section-title">Profile Photo</div>
+    <div class="field">
+      <input type="text" id="info-photo" placeholder="./assets/your-photo.jpg  or  https://..." oninput="autoSave()">
+    </div>
+    <div style="font-size:11px;opacity:0.5;margin-top:4px">Drop a photo in your assets/ folder and reference it here, or paste any image URL.</div>
+  </div>
+  <div class="info-section">
+    <div class="section-title">Contact Email</div>
+    <div class="field">
+      <input type="email" id="info-email" placeholder="your@email.com" oninput="autoSave()">
+    </div>
+  </div>
+</div>
+
+<!-- Load site data -->
+<script src="data.js"></script>
+
+<script>
+// ================================================================
+//  ADMIN STATE — always loaded directly from data.js
+// ================================================================
+
+// Deep clone helper
+function clone(obj) { return JSON.parse(JSON.stringify(obj)); }
+
+// Always load fresh from data.js globals — no localStorage
+let state = {
+  projects: clone(PROJECTS),
+  gridItems: clone(GRID_ITEMS),
+  info: clone(INFO)
+};
+
+// Auto-save indicator only (no localStorage)
+let saveTimer;
+function autoSave() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    collectState();
+    const el = document.getElementById('save-status');
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 1500);
+  }, 600);
+}
+
+// Collect current form values into state
+function collectState() {
+  // Projects
+  state.projects = [];
+  document.querySelectorAll('.project-card').forEach(card => {
+    const idx = parseInt(card.dataset.idx);
+    const proj = {
+      slug: card.querySelector('.p-slug').value.trim(),
+      title: card.querySelector('.p-title').value.trim(),
+      credits: card.querySelector('.p-credits').value.trim() || null,
+      description: [],
+      media: []
+    };
+    card.querySelectorAll('.para-textarea').forEach(ta => {
+      if (ta.value.trim()) proj.description.push(ta.value.trim());
+    });
+    card.querySelectorAll('.media-row').forEach(row => {
+      const item = {
+        type: row.querySelector('.m-type').value,
+        src: row.querySelector('.m-src').value.trim()
+      };
+      const portraitCb = row.querySelector('.m-portrait');
+      if (portraitCb && portraitCb.checked) item.portrait = true;
+      if (item.src) proj.media.push(item);
+    });
+    state.projects.push(proj);
+  });
+
+  // Grid items
+  state.gridItems = [];
+  document.querySelectorAll('.grid-item-row').forEach(row => {
+    const item = {
+      col: parseInt(row.querySelector('.gi-col').value),
+      type: row.querySelector('.gi-type').value,
+      src: row.querySelector('.gi-src').value.trim(),
+      project: row.querySelector('.gi-project').value || null
+    };
+    if (item.src) state.gridItems.push(item);
+  });
+
+  // Info
+  state.info = {
+    photo: document.getElementById('info-photo').value.trim(),
+    bio: [],
+    email: document.getElementById('info-email').value.trim()
+  };
+  document.querySelectorAll('.bio-textarea').forEach(ta => {
+    if (ta.value.trim()) state.info.bio.push(ta.value.trim());
+  });
+}
+
+
+// ================================================================
+//  TABS
+// ================================================================
+
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach((b, i) => {
+    b.classList.toggle('active', ['projects','grid','info'][i] === name);
+  });
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+
+// ================================================================
+//  PROJECTS RENDERER
+// ================================================================
+
+function renderProjects() {
+  const list = document.getElementById('projects-list');
+  list.innerHTML = '';
+  state.projects.forEach((p, i) => {
+    list.appendChild(buildProjectCard(p, i));
+  });
+}
+
+function buildProjectCard(p, i) {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.dataset.idx = i;
+
+  const slugified = (p.title || '').replace(/\s+/g, '-');
+
+  card.innerHTML = `
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title">${p.title || 'Untitled Project'}</div>
+      <div style="display:flex;gap:6px;align-items:center" onclick="event.stopPropagation()">
+        <button class="move-btn" onclick="moveProject(${i}, -1)">↑</button>
+        <button class="move-btn" onclick="moveProject(${i}, 1)">↓</button>
+        <button class="btn-danger" onclick="deleteProject(${i})">Remove</button>
+      </div>
+      <span class="card-arrow">▼</span>
+    </div>
+    <div class="card-body">
+
+      <div class="field">
+        <label>Project Title</label>
+        <input type="text" class="p-title" value="${esc(p.title)}" placeholder="e.g. Nike Jordan"
+          oninput="this.closest('.card').querySelector('.card-title').textContent=this.value||'Untitled'; autoSave()">
+      </div>
+
+      <div class="field">
+        <label>URL Slug</label>
+        <input type="text" class="p-slug" value="${esc(p.slug)}" placeholder="e.g. Nike-Jordan"
+          oninput="autoSave()">
+        <div class="hint">Used in the browser address bar. No spaces — use dashes. Example: <code>Pepsi-x-Super-Bowl-LIX</code></div>
+      </div>
+
+      <div class="field">
+        <label>Credits <span style="font-weight:400;text-transform:none">(optional)</span></label>
+        <input type="text" class="p-credits" value="${esc(p.credits || '')}" placeholder="Director: Darren Hummel · DP: ..."
+          oninput="autoSave()">
+      </div>
+
+      <div class="field">
+        <label>Description Paragraphs</label>
+        <div class="para-list">
+          ${(p.description || []).map(para => paraRow(para)).join('')}
+        </div>
+        <button class="btn-add" style="margin-top:6px" onclick="addParagraph(this)">+ Add Paragraph</button>
+      </div>
+
+      <div class="field">
+        <label>Media on Project Page</label>
+        <div class="hint" style="margin-bottom:8px">Add videos (Vimeo embed link), images, or MP4s. These appear in a grid below your description.</div>
+        <div class="media-list">
+          ${(p.media || []).map(m => mediaRow(m)).join('')}
+        </div>
+        <button class="btn-add" onclick="addMedia(this)">+ Add Media Item</button>
+      </div>
+
+    </div>`;
+
+  // Wire up change listeners for dynamically added elements
+  card.querySelectorAll('input,textarea,select').forEach(el => {
+    el.addEventListener('input', autoSave);
+    el.addEventListener('change', autoSave);
+  });
+
+  return card;
+}
+
+function paraRow(text) {
+  return `<div class="para-row">
+    <textarea class="para-textarea" rows="3" placeholder="Paragraph text..." oninput="autoSave()">${esc(text)}</textarea>
+    <button class="remove-btn" onclick="this.closest('.para-row').remove(); autoSave()">×</button>
+  </div>`;
+}
+
+function mediaRow(m) {
+  const isEmbed = m.type === 'vimeo' || m.type === 'youtube';
+  const portraitChecked = m.portrait ? 'checked' : '';
+  const srcLabel = m.type === 'vimeo'
+    ? 'https://player.vimeo.com/video/YOUR_ID'
+    : m.type === 'youtube'
+    ? 'https://www.youtube.com/embed/VIDEO_ID'
+    : 'https://... or ./assets/file.mp4';
+
+  return `<div class="media-row">
+    <div class="media-row-top">
+      <select class="m-type" onchange="updateMediaRow(this); autoSave()">
+        <option value="image" ${m.type==='image'?'selected':''}>Image</option>
+        <option value="video" ${m.type==='video'?'selected':''}>Video (MP4)</option>
+        <option value="vimeo" ${m.type==='vimeo'?'selected':''}>Vimeo</option>
+        <option value="youtube" ${m.type==='youtube'?'selected':''}>YouTube</option>
+      </select>
+      <input type="text" class="m-src" value="${esc(m.src||'')}" placeholder="${srcLabel}" oninput="autoSave()">
+      <button class="remove-btn" onclick="this.closest('.media-row').remove(); autoSave()">×</button>
+    </div>
+    <div class="media-row-bottom">
+      <label><input type="checkbox" class="m-portrait" ${portraitChecked} onchange="autoSave()"> Portrait / vertical video (9:16)</label>
+    </div>
+  </div>`;
+}
+
+function updateMediaRow(sel) {
+  const row = sel.closest('.media-row');
+  const srcInput = row.querySelector('.m-src');
+  const placeholders = {
+    image: 'https://... image URL or ./assets/photo.jpg',
+    video: 'https://... or ./assets/clip.mp4',
+    vimeo: 'https://player.vimeo.com/video/YOUR_VIDEO_ID',
+    youtube: 'https://www.youtube.com/embed/VIDEO_ID'
+  };
+  srcInput.placeholder = placeholders[sel.value] || '';
+}
+
+function addParagraph(btn) {
+  const list = btn.previousElementSibling;
+  const div = document.createElement('div');
+  div.innerHTML = paraRow('');
+  list.appendChild(div.firstElementChild);
+  autoSave();
+}
+
+function addMedia(btn) {
+  const list = btn.previousElementSibling;
+  const div = document.createElement('div');
+  div.innerHTML = mediaRow({ type: 'vimeo', src: '' });
+  list.appendChild(div.firstElementChild);
+  autoSave();
+}
+
+function toggleCard(header) {
+  header.closest('.card').classList.toggle('open');
+}
+
+function moveProject(i, dir) {
+  collectState();
+  const j = i + dir;
+  if (j < 0 || j >= state.projects.length) return;
+  [state.projects[i], state.projects[j]] = [state.projects[j], state.projects[i]];
+  autoSave();
+  renderProjects();
+}
+
+function deleteProject(i) {
+  if (!confirm('Remove "' + state.projects[i].title + '"? This cannot be undone.')) return;
+  collectState();
+  state.projects.splice(i, 1);
+  autoSave();
+  renderProjects();
+}
+
+function addProject() {
+  collectState();
+  state.projects.push({
+    slug: 'new-project-' + Date.now(),
+    title: 'New Project',
+    credits: null,
+    description: [''],
+    media: []
+  });
+  renderProjects();
+  // Open the new card
+  const cards = document.querySelectorAll('.project-card');
+  // actually the cards have class 'card' in the DOM
+  const allCards = document.querySelectorAll('#projects-list .card');
+  const last = allCards[allCards.length - 1];
+  if (last) { last.classList.add('open'); last.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+  autoSave();
+}
+
+// Make sure renderProjects marks cards with class
+function renderProjects() {
+  const list = document.getElementById('projects-list');
+  list.innerHTML = '';
+  state.projects.forEach((p, i) => {
+    const card = buildProjectCard(p, i);
+    card.classList.add('project-card');
+    list.appendChild(card);
+  });
+}
+
+
+// ================================================================
+//  GRID RENDERER
+// ================================================================
+
+function renderGrid() {
+  const list = document.getElementById('grid-list');
+  list.innerHTML = '';
+
+  const byCol = { 1: [], 2: [], 3: [] };
+  state.gridItems.forEach((item, i) => {
+    const col = item.col || 1;
+    if (!byCol[col]) byCol[col] = [];
+    byCol[col].push({ item, globalIdx: i });
+  });
+
+  [1, 2, 3].forEach(col => {
+    const section = document.createElement('div');
+    section.className = 'col-section';
+    section.innerHTML = `<div class="col-label">Column ${col}</div>`;
+
+    const items = byCol[col] || [];
+    items.forEach(({ item, globalIdx }, colPos) => {
+      section.appendChild(buildGridRow(item, globalIdx, col, colPos, items.length));
+    });
+
+    list.appendChild(section);
+  });
+}
+
+function buildGridRow(item, globalIdx, col, colPos, colTotal) {
+  const projectOptions = state.projects.map(p =>
+    `<option value="${esc(p.slug)}" ${item.project===p.slug?'selected':''}>${esc(p.title)}</option>`
+  ).join('');
+
+  const row = document.createElement('div');
+  row.className = 'grid-item-row';
+  row.dataset.gidx = globalIdx;
+
+  const isVideo = item.type === 'video';
+  const preview = isVideo
+    ? `<video src="${esc(item.src)}" muted style="width:60px;height:60px;object-fit:cover;border-radius:5px;display:block;background:#eee"></video>`
+    : `<img class="grid-item-preview" src="${esc(item.src)}" alt="" onerror="this.style.background='#ddd'">`;
+
+  row.innerHTML = `
+    ${preview}
+    <div class="grid-item-fields">
+      <div class="grid-item-row-inline">
+        <label>Source URL</label>
+        <input class="mini gi-src" type="text" value="${esc(item.src)}" placeholder="https://... or ./assets/clip.mp4" oninput="updateGridPreview(this); autoSave()">
+      </div>
+      <div class="grid-item-row-inline">
+        <label>Links to</label>
+        <select class="mini gi-project" onchange="autoSave()">
+          <option value="">— no link —</option>
+          ${projectOptions}
+        </select>
+      </div>
+      <div class="grid-item-row-inline">
+        <label>Type</label>
+        <select class="mini gi-type" onchange="autoSave()">
+          <option value="image" ${item.type==='image'?'selected':''}>Image / GIF</option>
+          <option value="video" ${item.type==='video'?'selected':''}>Video (MP4 loop)</option>
+        </select>
+      </div>
+      <div class="grid-item-row-inline">
+        <label>Column</label>
+        <select class="mini gi-col" onchange="collectState(); autoSave(); renderGrid()">
+          <option value="1" ${col===1?'selected':''}>Column 1</option>
+          <option value="2" ${col===2?'selected':''}>Column 2</option>
+          <option value="3" ${col===3?'selected':''}>Column 3</option>
+        </select>
+      </div>
+      <div class="grid-item-actions">
+        ${colPos > 0 ? `<button class="move-btn" onclick="moveGridItem(${globalIdx}, -1)">↑</button>` : ''}
+        ${colPos < colTotal-1 ? `<button class="move-btn" onclick="moveGridItem(${globalIdx}, 1)">↓</button>` : ''}
+        <button class="btn-sm" style="background:#fee2e2;color:#ef4444" onclick="deleteGridItem(${globalIdx})">Remove</button>
+      </div>
+    </div>`;
+
+  return row;
+}
+
+function updateGridPreview(input) {
+  const row = input.closest('.grid-item-row');
+  const preview = row.querySelector('img, video');
+  if (preview) preview.src = input.value;
+}
+
+function moveGridItem(globalIdx, dir) {
+  collectState();
+  const item = state.gridItems[globalIdx];
+  const col = item.col || 1;
+  // Get all items in same column, in order
+  const colItems = state.gridItems.map((it, i) => ({ it, i })).filter(x => (x.it.col||1) === col);
+  const posInCol = colItems.findIndex(x => x.i === globalIdx);
+  const swapPos = posInCol + dir;
+  if (swapPos < 0 || swapPos >= colItems.length) return;
+  const swapGlobalIdx = colItems[swapPos].i;
+  [state.gridItems[globalIdx], state.gridItems[swapGlobalIdx]] = [state.gridItems[swapGlobalIdx], state.gridItems[globalIdx]];
+  autoSave();
+  renderGrid();
+}
+
+function deleteGridItem(globalIdx) {
+  if (!confirm('Remove this thumbnail from the grid?')) return;
+  collectState();
+  state.gridItems.splice(globalIdx, 1);
+  autoSave();
+  renderGrid();
+}
+
+function addGridItem() {
+  collectState();
+  state.gridItems.push({ col: 1, type: 'image', src: '', project: null });
+  autoSave();
+  renderGrid();
+  // Scroll to new item in col 1
+  const colSections = document.querySelectorAll('.col-section');
+  if (colSections[0]) colSections[0].scrollIntoView({ behavior: 'smooth', block: 'end' });
+}
+
+
+// ================================================================
+//  INFO RENDERER
+// ================================================================
+
+function renderInfo() {
+  document.getElementById('info-photo').value = state.info.photo || '';
+  document.getElementById('info-email').value = state.info.email || '';
+  const bioList = document.getElementById('bio-list');
+  bioList.innerHTML = '';
+  (state.info.bio || []).forEach(para => {
+    const div = document.createElement('div');
+    div.innerHTML = `<div class="para-row">
+      <textarea class="bio-textarea" rows="3" oninput="autoSave()">${esc(para)}</textarea>
+      <button class="remove-btn" onclick="this.closest('.para-row').remove(); autoSave()">×</button>
+    </div>`;
+    bioList.appendChild(div.firstElementChild);
+  });
+}
+
+function addBioParagraph() {
+  const list = document.getElementById('bio-list');
+  const div = document.createElement('div');
+  div.innerHTML = `<div class="para-row">
+    <textarea class="bio-textarea" rows="3" placeholder="Bio paragraph..." oninput="autoSave()"></textarea>
+    <button class="remove-btn" onclick="this.closest('.para-row').remove(); autoSave()">×</button>
+  </div>`;
+  list.appendChild(div.firstElementChild);
+  autoSave();
+}
+
+
+// ================================================================
+//  EXPORT
+// ================================================================
+
+function exportData() {
+  collectState();
+
+  const js = `// ================================================================
+//  DARREN JAMES HUMMEL — SITE DATA
+//  Managed via admin.html. Last exported: ${new Date().toLocaleString()}
+// ================================================================
+
+const PROJECTS = ${JSON.stringify(state.projects, null, 2)};
+
+const GRID_ITEMS = ${JSON.stringify(state.gridItems, null, 2)};
+
+const INFO = ${JSON.stringify(state.info, null, 2)};
+`;
+
+  const blob = new Blob([js], { type: 'application/javascript' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'data.js';
+  a.click();
+  URL.revokeObjectURL(a.href);
+
+  // (no localStorage — data.js is the single source of truth)
+}
+
+
+// ================================================================
+//  HELPERS
+// ================================================================
+
+function esc(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+
+// ================================================================
+//  INIT
+// ================================================================
+
+renderProjects();
+renderGrid();
+renderInfo();
+
+// Warn before closing with unsaved changes
+window.addEventListener('beforeunload', e => {
+  collectState();
+  // simple check: if state differs from last exported
+  // (we always save to localStorage so this is mainly a reminder)
+});
+</script>
+</body>
+</html>

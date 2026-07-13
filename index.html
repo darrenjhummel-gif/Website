@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Darren James Hummel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+
+    /* ================================================
+       BASE RESET
+    ================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      background: #FFFBF5;
+      color: #000;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      /* Black arrow cursor */
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='20' viewBox='0 0 16 20'%3E%3Cpath d='M2,2 L2,17 L5.5,13 L8.5,19.5 L10.5,18.5 L7.5,12 L12,12 Z' fill='black' stroke='white' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E") 2 2, default;
+    }
+
+    a { color: inherit; text-decoration: none; cursor: inherit; }
+    a:hover { opacity: 0.5; }
+    button { cursor: inherit; }
+    img, video { display: block; max-width: 100%; }
+    button { background: none; border: none; font: inherit; color: inherit; padding: 0; }
+
+    /* Magic wand cursor on clickable grid items */
+    .grid-item[data-clickable],
+    .grid-item[data-clickable] * {
+      cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28'><text y='26' font-size='24'>🪄</text></svg>") 4 24, pointer;
+    }
+
+    /* Restore default cursor on touch devices */
+    @media (hover: none) {
+      html, body { cursor: auto; }
+      .grid-item[data-clickable], .grid-item[data-clickable] * { cursor: pointer; }
+    }
+
+    /* ================================================
+       PAGE TRANSITIONS
+    ================================================ */
+    @keyframes pageIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    #main {
+      transition: opacity 0.25s ease;
+    }
+
+    /* ================================================
+       LAYOUT
+    ================================================ */
+    #app {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ================================================
+       SIDEBAR
+    ================================================ */
+    #sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 175px;
+      height: 100vh;
+      padding: 18px 16px 18px 18px;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      z-index: 200;
+      background: #FFFBF5;
+    }
+
+    .site-name {
+      font-weight: 400;
+      font-size: 10px;
+      line-height: 1.6;
+      margin-bottom: 18px;
+      cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28'><text y='26' font-size='24'>✨</text></svg>") 4 24, pointer;
+      line-height: 1.3;
+    }
+
+    .taglines {
+      font-size: 10px;
+      line-height: 1.7;
+      margin-bottom: 18px;
+      opacity: 0.9;
+    }
+
+    .mobile-nav-toggle {
+      display: none;
+      font-size: 10px;
+      margin-bottom: 10px;
+      text-align: left;
+      cursor: none;
+    }
+
+    .nav-list { list-style: none; flex: 1; }
+    .nav-list li { margin-bottom: 1px; }
+
+    .nav-list > li > a {
+      font-size: 10px;
+      display: block;
+      padding: 1px 0;
+      transition: opacity 0.15s;
+    }
+
+    .nav-list > li > a:hover { opacity: 0.5; }
+    .nav-list > li > a.active { font-weight: 700; opacity: 1; }
+    .nav-divider { height: 10px; }
+
+    /* ---- Accordion sections ---- */
+    .nav-section { margin-bottom: 3px; }
+
+    .nav-section-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      padding: 2px 0;
+      background: none;
+      border: none;
+      text-align: left;
+      cursor: inherit;
+      line-height: 1.5;
+    }
+
+    .nav-section-arrow {
+      font-size: 8px;
+      display: inline-block;
+      transition: transform 0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      line-height: 1;
+      opacity: 0.8;
+    }
+
+    .nav-section-btn.open .nav-section-arrow { transform: rotate(90deg); }
+
+    .nav-work-btn     { color: #da3e3f; }
+    .nav-personal-btn { color: #339966; }
+    .nav-magic-btn    { color: #4477D4; }
+    .nav-work-btn:hover     { opacity: 0.6; }
+    .nav-personal-btn:hover { opacity: 0.6; }
+
+    .nav-section-items {
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.28s ease;
+      padding-left: 9px;
+    }
+
+    .nav-section-items.open { max-height: 700px; }
+
+    .nav-section-items a {
+      font-size: 10px;
+      display: block;
+      padding: 1px 0;
+      transition: opacity 0.15s;
+      color: #000;
+    }
+
+    .nav-section-items a:hover { opacity: 0.5; }
+    .nav-section-items a.active { font-weight: 700; }
+
+    /* Magic as a direct styled link */
+    .nav-magic-link {
+      display: block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      padding: 2px 0;
+      color: #4477D4;
+      margin-bottom: 3px;
+    }
+    .nav-magic-link:hover { opacity: 0.6; }
+
+    .social-links {
+      margin-top: 20px;
+      display: flex;
+      gap: 11px;
+      align-items: center;
+    }
+    .social-links a {
+      display: inline-flex;
+      align-items: center;
+      color: #000;
+      opacity: 0.65;
+    }
+    .social-links a:hover { opacity: 0.25; }
+    .social-links svg { display: block; }
+
+    /* LET'S CONNECT nav link */
+    .nav-lets-connect {
+      color: #FF9F1C;
+      font-weight: 700;
+      font-size: 10px;
+      letter-spacing: 0.05em;
+    }
+    .nav-lets-connect:hover { opacity: 0.6; }
+
+    /* ================================================
+       MAIN CONTENT
+    ================================================ */
+    #main {
+      margin-left: 175px;
+      flex: 1;
+      padding: 18px 18px 40px 18px;
+      min-height: 100vh;
+    }
+
+    /* ================================================
+       HOMEPAGE MASONRY GRID
+    ================================================ */
+    .masonry-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      align-items: start;
+    }
+
+    .masonry-col {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    /* Grid items — hover scale + title overlay */
+    .grid-item {
+      display: block;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .grid-item img,
+    .grid-item video {
+      width: 100%;
+      display: block;
+      transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .grid-item:hover img,
+    .grid-item:hover video {
+      transform: scale(1.04);
+    }
+
+    /* Project title overlay on hover */
+    .grid-item-overlay {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 32px 10px 10px;
+      background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .grid-item:hover .grid-item-overlay { opacity: 1; }
+
+    /* ================================================
+       PROJECT PAGE
+    ================================================ */
+
+    /* Hero: first media item, full width */
+    .project-hero {
+      width: 100%;
+      margin-bottom: 28px;
+    }
+
+    .project-hero video,
+    .project-hero img {
+      width: 100%;
+      display: block;
+    }
+
+    .project-hero iframe {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: none;
+      display: block;
+    }
+
+    /* Portrait hero: constrain width so 9:16 doesn't fill the screen */
+    .project-hero.is-portrait {
+      max-width: 420px;
+    }
+
+    .project-hero.is-portrait iframe,
+    .project-hero.is-portrait video {
+      aspect-ratio: 9 / 16;
+    }
+
+    /* Title + description section */
+    .project-info {
+      max-width: 560px;
+      margin-bottom: 36px;
+    }
+
+    .project-title {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 16px;
+    }
+
+    .project-description {
+      font-size: 10px;
+      line-height: 1.7;
+    }
+
+    .project-description p { margin-bottom: 10px; }
+    .project-description p:last-child { margin-bottom: 0; }
+
+    .project-credits {
+      font-size: 10px;
+      line-height: 1.65;
+      opacity: 0.6;
+      font-style: italic;
+      margin-top: 16px;
+    }
+
+    /* Additional media below the description */
+    .project-media-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    /* layout: "film-list" — title, then each video paired with its description */
+    .film-entry {
+      margin-bottom: 48px;
+    }
+
+    .film-entry .project-media-item {
+      margin-bottom: 14px;
+    }
+
+    .film-entry .project-media-item iframe {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: none;
+      display: block;
+    }
+
+    .film-description {
+      font-size: 10px;
+      line-height: 1.7;
+      max-width: 560px;
+    }
+
+    /* layout: "media-top" — tight grid of all media first, text below */
+    .project-media-top-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3px;
+      margin-bottom: 28px;
+    }
+    .project-media-top-grid .project-media-item iframe {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: none;
+      display: block;
+    }
+    @media (max-width: 768px) {
+      .project-media-top-grid { grid-template-columns: 1fr; }
+    }
+
+    .project-media-item { overflow: hidden; }
+
+    .project-media-item img,
+    .project-media-item video {
+      width: 100%;
+      display: block;
+    }
+
+    .project-media-item iframe {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: none;
+      display: block;
+    }
+
+    .project-media-item.portrait iframe,
+    .project-media-item.portrait video {
+      aspect-ratio: 9 / 16;
+    }
+
+    /* Prev / Next nav */
+    .project-nav {
+      margin-top: 40px;
+      display: flex;
+      gap: 24px;
+      font-size: 10px;
+    }
+
+    /* ================================================
+       INFORMATION PAGE
+    ================================================ */
+    .info-page { max-width: 780px; }
+
+    .info-layout {
+      display: flex;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .info-left { flex: 1; min-width: 0; }
+
+    .info-photo {
+      width: 210px;
+      flex-shrink: 0;
+    }
+
+    .info-photo img {
+      width: 100%;
+      display: block;
+    }
+
+    .info-section { margin-bottom: 28px; }
+
+    .info-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+
+    .info-text { font-size: 10px; line-height: 1.65; }
+    .info-text p { margin-bottom: 10px; }
+    .info-text p:last-child { margin-bottom: 0; }
+    .info-text a { text-decoration: underline; }
+
+    /* Bio text is italic */
+    .info-bio-text { font-style: italic; }
+
+    @media (max-width: 768px) {
+      .info-layout { flex-direction: column-reverse; }
+      .info-photo { width: 100%; max-width: 260px; }
+    }
+
+    /* ================================================
+       PHOTO JOURNAL
+    ================================================ */
+    .photo-journal-grid { grid-template-columns: repeat(3, 1fr); }
+
+    /* ================================================
+       MOBILE
+    ================================================ */
+    @media (max-width: 768px) {
+      #app { flex-direction: column; }
+
+      #sidebar {
+        position: sticky;
+        top: 0;
+        z-index: 200;
+        width: 100%;
+        height: auto;
+        padding: 12px 16px;
+        border-bottom: 1px solid rgba(0,0,0,0.08);
+        background: #FFFBF5;
+      }
+
+      /* Mobile header row: name left, toggle right */
+      #sidebar > .site-name {
+        display: inline-block;
+        margin-bottom: 0;
+        line-height: 1.2;
+      }
+
+      .mobile-nav-toggle {
+        display: block;
+        position: absolute;
+        top: 12px;
+        right: 16px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        background: none;
+        border: 1px solid rgba(0,0,0,0.15);
+        border-radius: 4px;
+        padding: 4px 10px;
+        cursor: pointer;
+      }
+
+      .nav-list {
+        display: none;
+        padding-top: 12px;
+        padding-bottom: 4px;
+      }
+      .nav-list.open { display: block; }
+
+      .social-links {
+        display: none;
+        margin-top: 12px;
+        padding-bottom: 4px;
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+      .social-links.open { display: flex; }
+
+      #main {
+        margin-left: 0;
+        padding: 14px 12px 60px;
+      }
+
+      /* 3-column grid on mobile */
+      .masonry-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 3px;
+      }
+
+      /* Project pages */
+      .project-page { padding: 0; }
+      .project-info { max-width: 100%; }
+      .project-hero { margin-bottom: 18px; }
+      .project-hero.is-portrait { max-width: 100%; }
+      .project-media-grid { grid-template-columns: 1fr; gap: 8px; }
+      .project-media-top-grid { grid-template-columns: 1fr; gap: 8px; }
+      .film-entry { margin-bottom: 32px; }
+
+      /* Info page */
+      .info-layout { flex-direction: column-reverse; gap: 20px; }
+      .info-photo { width: 100%; max-width: 100%; }
+
+      /* Vimeo iframes full width */
+      .project-media-item iframe { width: 100%; }
+    }
+
+    @media (max-width: 400px) {
+      .masonry-grid { grid-template-columns: repeat(3, 1fr); gap: 2px; }
+    }
+
+  </style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside id="sidebar">
+    <div class="site-name" onclick="navigate('/')"><b>D</b>arren<br><b>J</b>ames<br><b>H</b>ummel</div>
+
+    <button class="mobile-nav-toggle" id="nav-toggle" onclick="toggleMobileNav()">↓ menu</button>
+
+    <nav>
+      <ul class="nav-list" id="nav-list"></ul>
+    </nav>
+
+    <div class="social-links" id="social-links">
+      <!-- Instagram -->
+      <a href="https://www.instagram.com/darrenmovie/" target="_blank" rel="noopener" title="Instagram">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5"/>
+          <circle cx="12" cy="12" r="5"/>
+          <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/>
+        </svg>
+      </a>
+      <!-- Vimeo -->
+      <a href="https://vimeo.com/user83522321" target="_blank" rel="noopener" title="Vimeo">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M23.98 6.42c-.1 2.34-1.74 5.54-4.9 9.61-3.27 4.25-6.03 6.37-8.29 6.37-1.4 0-2.58-1.3-3.55-3.88L5.32 12.5C4.6 9.91 3.83 8.62 3 8.62c-.18 0-.81.38-1.88 1.13L0 8.13a217 217 0 0 0 3.32-2.95C4.91 3.76 6.1 2.99 6.91 2.99c1.85 0 2.99 1.31 3.4 3.92.55 2.72 1 4.61 1.36 5.68.56 1.96 1.18 2.93 1.85 2.93.52 0 1.31-.78 2.36-2.35 1.06-1.56 1.62-2.75 1.7-3.57.15-1.35-.4-2.03-1.68-2.03-.59 0-1.21.14-1.85.41 1.23-4.02 3.58-5.98 7.06-5.86 2.57.08 3.78 1.74 3.63 4.9z"/>
+        </svg>
+      </a>
+      <!-- LinkedIn -->
+      <a href="https://www.linkedin.com/in/darren-hummel-10090370/" target="_blank" rel="noopener" title="LinkedIn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45C23.2 24 24 23.23 24 22.27V1.73C24 .77 23.2 0 22.22 0z"/>
+        </svg>
+      </a>
+      <!-- YouTube -->
+      <a href="https://www.youtube.com/@DarrrenMovie" target="_blank" rel="noopener" title="YouTube">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.75 15.5V8.5l6.5 3.5-6.5 3.5z"/>
+        </svg>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ===== MAIN ===== -->
+  <main id="main"></main>
+
+</div>
+
+
+<script src="data.js"></script>
+<script>
+// ================================================================
+//  ROUTER + RENDERER  (data lives in data.js)
+// ================================================================
+
+const mainEl = document.getElementById('main');
+const navList = document.getElementById('nav-list');
+
+
+// ---- PAGE TRANSITIONS ----
+
+function fadeOut(cb) {
+  mainEl.style.transition = 'opacity 0.18s ease';
+  mainEl.style.opacity = '0';
+  setTimeout(cb, 180);
+}
+
+function fadeIn() {
+  mainEl.style.transition = 'opacity 0.3s ease';
+  mainEl.style.opacity = '1';
+}
+
+
+// ---- NAV ----
+
+const WORK_SLUGS     = ['Pepsi-x-Super-Bowl-LIX','Postmates-x-Coachella','Dryft-Board','Graffeo-Coffee','C4-Energy','Roblox','BLK','Nike','Cetaphil','Jack-In-The-Box','Pebble-Beach','Greenhouse'];
+const PERSONAL_SLUGS = ['Short-Films','Photography-Journal'];
+const MAGIC_SLUG     = 'Magic';
+
+function buildNav() {
+  navList.innerHTML = '';
+
+  function makeAccordion(label, btnClass, slugs) {
+    const projects = slugs.map(s => PROJECTS.find(p => p.slug === s)).filter(Boolean);
+    const li = document.createElement('li');
+    li.className = 'nav-section';
+
+    const btn = document.createElement('button');
+    btn.className = `nav-section-btn ${btnClass}`;
+    btn.innerHTML = `${label}<span class="nav-section-arrow">›</span>`;
+
+    const items = document.createElement('div');
+    items.className = 'nav-section-items';
+
+    projects.forEach(p => {
+      const a = document.createElement('a');
+      a.textContent = p.title;
+      a.dataset.slug = p.slug;
+      a.onclick = e => { e.preventDefault(); navigate('/' + p.slug); };
+      items.appendChild(a);
+    });
+
+    btn.onclick = () => {
+      const isOpen = btn.classList.toggle('open');
+      items.classList.toggle('open', isOpen);
+    };
+
+    li.appendChild(btn);
+    li.appendChild(items);
+    return li;
+  }
+
+  navList.appendChild(makeAccordion('WORK',     'nav-work-btn',     WORK_SLUGS));
+  navList.appendChild(makeAccordion('PERSONAL', 'nav-personal-btn', PERSONAL_SLUGS));
+
+  // MAGIC — direct link (single destination page for now)
+  const magicLi = document.createElement('li');
+  const magicA  = document.createElement('a');
+  magicA.className = 'nav-magic-link';
+  magicA.textContent = 'MAGIC';
+  magicA.dataset.slug = MAGIC_SLUG;
+  magicA.onclick = e => { e.preventDefault(); navigate('/' + MAGIC_SLUG); };
+  magicLi.appendChild(magicA);
+  navList.appendChild(magicLi);
+
+  const divLi = document.createElement('li');
+  divLi.className = 'nav-divider';
+  navList.appendChild(divLi);
+
+  const infoLi = document.createElement('li');
+  const infoA  = document.createElement('a');
+  infoA.textContent = "LET'S CONNECT";
+  infoA.className = 'nav-lets-connect';
+  infoA.onclick = e => { e.preventDefault(); navigate('/Information'); };
+  infoLi.appendChild(infoA);
+  navList.appendChild(infoLi);
+}
+
+function navigate(path) {
+  fadeOut(() => {
+    window.location.hash = path;
+  });
+  navList.classList.remove('open');
+  document.getElementById('social-links').classList.remove('open');
+  document.getElementById('nav-toggle').textContent = '↓ menu';
+}
+
+function toggleMobileNav() {
+  const open = navList.classList.toggle('open');
+  document.getElementById('social-links').classList.toggle('open', open);
+  document.getElementById('nav-toggle').textContent = open ? '↑ close' : '↓ menu';
+}
+
+function setActiveNav(slug) {
+  // Clear all active states
+  navList.querySelectorAll('a').forEach(a => a.classList.remove('active'));
+
+  if (!slug) return;
+
+  if (slug === 'Information') {
+    navList.querySelectorAll('a').forEach(a => {
+      if (a.textContent === "LET'S CONNECT") a.classList.add('active');
+    });
+    return;
+  }
+
+  // Mark the matching link active and open its accordion if needed
+  navList.querySelectorAll('a[data-slug]').forEach(a => {
+    if (a.dataset.slug === slug) {
+      a.classList.add('active');
+      const items = a.closest('.nav-section-items');
+      const btn   = a.closest('.nav-section')?.querySelector('.nav-section-btn');
+      if (items) items.classList.add('open');
+      if (btn)   btn.classList.add('open');
+    }
+  });
+}
+
+
+// ---- RENDERERS ----
+
+function renderHome() {
+  document.title = 'Darren James Hummel';
+  setActiveNav(null);
+
+  mainEl.innerHTML = `
+    <div class="masonry-grid">
+      <div class="masonry-col" id="col1"></div>
+      <div class="masonry-col" id="col2"></div>
+      <div class="masonry-col" id="col3"></div>
+    </div>`;
+
+  const cols = {
+    1: document.getElementById('col1'),
+    2: document.getElementById('col2'),
+    3: document.getElementById('col3')
+  };
+
+  let autoCol = 1;
+
+  GRID_ITEMS.forEach(item => {
+    const targetCol = item.col || autoCol;
+    if (!item.col) autoCol = autoCol === 3 ? 1 : autoCol + 1;
+
+    const isLink = !!item.project;
+    const wrapper = isLink
+      ? Object.assign(document.createElement('a'), {
+          onclick: e => { e.preventDefault(); navigate('/' + item.project); }
+        })
+      : document.createElement('div');
+
+    wrapper.className = 'grid-item';
+    if (isLink) wrapper.setAttribute('data-clickable', '');
+
+    // Media element
+    if (item.type === 'video') {
+      const v = document.createElement('video');
+      v.src = item.src;
+      v.autoplay = true;
+      v.loop = true;
+      v.muted = true;
+      v.playsInline = true;
+      v.setAttribute('playsinline', '');
+      wrapper.appendChild(v);
+    } else {
+      const img = document.createElement('img');
+      img.src = item.src;
+      img.loading = 'lazy';
+      img.alt = '';
+      wrapper.appendChild(img);
+    }
+
+    // Project title overlay
+    if (isLink) {
+      const proj = PROJECTS.find(p => p.slug === item.project);
+      if (proj) {
+        const overlay = document.createElement('div');
+        overlay.className = 'grid-item-overlay';
+        overlay.textContent = proj.title;
+        wrapper.appendChild(overlay);
+      }
+    }
+
+    (cols[targetCol] || cols[1]).appendChild(wrapper);
+  });
+}
+
+
+function renderProject(slug) {
+  const project = PROJECTS.find(p => p.slug === slug);
+  if (!project) { renderHome(); return; }
+
+  document.title = project.title + ' — Darren James Hummel';
+  setActiveNav(slug);
+
+  const idx = PROJECTS.indexOf(project);
+  const prev = PROJECTS[idx - 1] || null;
+  const next = PROJECTS[idx + 1] || null;
+
+  // Photo Journal: full masonry grid of images
+  if (slug === 'Photography-Journal') {
+    const mediaHtml = project.media.length > 0
+      ? `<div class="masonry-grid photo-journal-grid">` +
+          project.media.map(m => `<div class="grid-item">${mediaEl(m)}</div>`).join('') +
+        `</div>`
+      : `<p style="font-size:10px;opacity:0.4">Add photos via admin.html to populate this page.</p>`;
+
+    mainEl.innerHTML = `
+      <div class="project-page">
+        <div class="project-info"><div class="project-title">${project.title}</div></div>
+        ${mediaHtml}
+        ${navHtml(prev, next)}
+      </div>`;
+    return;
+  }
+
+  const descHtml = project.description.map(p => `<p>${p}</p>`).join('');
+  const creditsHtml = project.credits ? `<div class="project-credits">${project.credits}</div>` : '';
+
+  // layout: "film-list" — title, then each video paired with its description by index
+  if (project.layout === 'film-list') {
+    const filmsHtml = project.media.map((m, i) => {
+      const desc = project.description[i] || '';
+      return `
+        <div class="film-entry">
+          <div class="project-media-item">${mediaEl(m)}</div>
+          ${desc ? `<div class="film-description">${desc}</div>` : ''}
+        </div>`;
+    }).join('');
+
+    mainEl.innerHTML = `
+      <div class="project-page">
+        <div class="project-info" style="margin-bottom:24px">
+          <div class="project-title">${project.title}</div>
+        </div>
+        ${filmsHtml}
+        ${navHtml(prev, next)}
+      </div>`;
+    return;
+  }
+
+  // layout: "media-top" — all media in a tight grid first, then text
+  if (project.layout === 'media-top') {
+    const allMediaHtml = project.media.length > 0
+      ? `<div class="project-media-top-grid">` +
+          project.media.map(m => `<div class="project-media-item${m.portrait ? ' portrait' : ''}">${mediaEl(m)}</div>`).join('') +
+        `</div>`
+      : '';
+
+    mainEl.innerHTML = `
+      <div class="project-page">
+        ${allMediaHtml}
+        <div class="project-info">
+          <div class="project-title">${project.title}</div>
+          <div class="project-description">${descHtml}</div>
+          ${creditsHtml}
+        </div>
+        ${navHtml(prev, next)}
+      </div>`;
+    return;
+  }
+
+  // Default layout: first media item → hero, rest in grid below description
+  const hero = project.media[0] || null;
+  const rest  = project.media.slice(1);
+
+  const heroHtml = hero
+    ? `<div class="project-hero${hero.portrait ? ' is-portrait' : ''}">${mediaEl(hero)}</div>`
+    : '';
+
+  const additionalHtml = rest.length > 0
+    ? `<div class="project-media-grid">` +
+        rest.map(m => `<div class="project-media-item${m.portrait ? ' portrait' : ''}">${mediaEl(m)}</div>`).join('') +
+      `</div>`
+    : '';
+
+  mainEl.innerHTML = `
+    <div class="project-page">
+      ${heroHtml}
+      <div class="project-info">
+        <div class="project-title">${project.title}</div>
+        <div class="project-description">${descHtml}</div>
+        ${creditsHtml}
+      </div>
+      ${additionalHtml}
+      ${navHtml(prev, next)}
+    </div>`;
+}
+
+
+function renderInfo() {
+  document.title = 'Information — Darren James Hummel';
+  setActiveNav('Information');
+
+  const bioHtml = INFO.bio.map(p => `<p>${p}</p>`).join('');
+  const photoHtml = INFO.photo
+    ? `<div class="info-photo"><img src="${INFO.photo}" alt="Darren James Hummel"></div>`
+    : '';
+
+  mainEl.innerHTML = `
+    <div class="info-page">
+      <div class="info-layout">
+        <div class="info-left">
+          <div class="info-section">
+            <div class="info-label">Bio</div>
+            <div class="info-text info-bio-text">${bioHtml}</div>
+          </div>
+          <div class="info-section">
+            <div class="info-label">Contact</div>
+            <div class="info-text">
+              <p>Trying to connect?<br>
+              <a href="mailto:${INFO.email}">${INFO.email}</a></p>
+            </div>
+          </div>
+        </div>
+        ${photoHtml}
+      </div>
+    </div>`;
+}
+
+
+// ---- HELPERS ----
+
+function mediaEl(m) {
+  if (m.type === 'image') {
+    return `<img src="${m.src}" loading="lazy" alt="">`;
+  } else if (m.type === 'video') {
+    return `<video src="${m.src}" autoplay loop muted playsinline></video>`;
+  } else if (m.type === 'vimeo' || m.type === 'youtube') {
+    return `<iframe src="${m.src}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe>`;
+  }
+  return '';
+}
+
+function navHtml(prev, next) {
+  const p = prev
+    ? `<a onclick="navigate('/${prev.slug}')">← ${prev.title}</a>`
+    : `<a onclick="navigate('/')">← Index</a>`;
+  const n = next
+    ? `<a onclick="navigate('/${next.slug}')" style="margin-left:auto">${next.title} →</a>`
+    : '';
+  return `<div class="project-nav">${p}${n}</div>`;
+}
+
+
+// ---- ROUTER ----
+
+function handleRoute() {
+  const hash = window.location.hash.replace('#', '') || '/';
+  window.scrollTo(0, 0);
+
+  // Snap to transparent, render, then fade in
+  mainEl.style.transition = 'none';
+  mainEl.style.opacity = '0';
+
+  requestAnimationFrame(() => {
+    if (hash === '/' || hash === '') renderHome();
+    else if (hash === '/Information')  renderInfo();
+    else                               renderProject(hash.replace('/', ''));
+
+    requestAnimationFrame(fadeIn);
+  });
+}
+
+// Init
+buildNav();
+handleRoute();
+window.addEventListener('hashchange', handleRoute);
+
+</script>
+</body>
+</html>
