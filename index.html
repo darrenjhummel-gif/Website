@@ -217,6 +217,7 @@
       flex: 1;
       padding: 18px 18px 40px 18px;
       min-height: 100vh;
+      position: relative;
     }
 
     /* ================================================
@@ -411,6 +412,189 @@
     }
 
     /* ================================================
+       PROJECT V2 — Primer-inspired numbered sections
+    ================================================ */
+
+    .project-page.pv2 {
+      max-width: 100%;
+      padding: 0;
+    }
+
+    /* Header */
+    .pv2-header { padding-bottom: 20px; }
+    .pv2-project-title {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 12px;
+    }
+    .pv2-header-rule {
+      height: 1px;
+      background: linear-gradient(to right, #000 0%, rgba(0,0,0,0.18) 55%, transparent 100%);
+    }
+
+    /* Section */
+    .pv2-section {
+      border-top: 1px solid rgba(0,0,0,0.09);
+      padding: 28px 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Ghost watermark number */
+    .pv2-ghost {
+      position: absolute;
+      top: -16px;
+      right: -6px;
+      font-size: 144px;
+      font-weight: 800;
+      color: rgba(0,0,0,0.032);
+      line-height: 1;
+      letter-spacing: -0.06em;
+      pointer-events: none;
+      user-select: none;
+      z-index: 0;
+    }
+
+    /* Section meta row: ● 01 ─────── */
+    .pv2-section-meta {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 26px;
+      position: relative;
+      z-index: 1;
+    }
+    .pv2-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #FF9F1C;
+      flex-shrink: 0;
+    }
+    .pv2-num {
+      font-size: 9px;
+      font-weight: 700;
+      color: #FF9F1C;
+      letter-spacing: 0.15em;
+      flex-shrink: 0;
+    }
+    .pv2-num-rule {
+      flex: 1;
+      height: 1px;
+      background: rgba(0,0,0,0.08);
+    }
+
+    /* Two-column grid */
+    .pv2-cols {
+      display: grid;
+      grid-template-columns: 1fr 1px 1fr;
+      column-gap: 36px;
+      align-items: start;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Alternating: flip media to right */
+    .pv2-section--alt .pv2-col-media { order: 3; }
+    .pv2-section--alt .pv2-col-div   { order: 2; }
+    .pv2-section--alt .pv2-col-text  { order: 1; }
+
+    /* Vertical column divider */
+    .pv2-col-div {
+      background: rgba(0,0,0,0.1);
+      align-self: stretch;
+      min-height: 100px;
+    }
+
+    /* Media column */
+    .pv2-col-media iframe,
+    .pv2-col-media video,
+    .pv2-col-media img {
+      width: 100%;
+      display: block;
+      border: none;
+    }
+    .pv2-col-media iframe { aspect-ratio: 16 / 9; }
+
+    /* Portrait video: narrow + 9:16 */
+    .pv2-portrait-wrap { max-width: 240px; }
+    .pv2-portrait-wrap iframe,
+    .pv2-portrait-wrap video { aspect-ratio: 9 / 16; width: 100%; display: block; border: none; }
+
+    /* Solo (unpaired) media */
+    .pv2-solo {
+      max-width: 660px;
+      position: relative;
+      z-index: 1;
+    }
+    .pv2-solo iframe,
+    .pv2-solo video,
+    .pv2-solo img { width: 100%; display: block; border: none; aspect-ratio: 16 / 9; }
+    .pv2-solo.portrait { max-width: 260px; }
+    .pv2-solo.portrait iframe,
+    .pv2-solo.portrait video { aspect-ratio: 9 / 16; }
+
+    /* Text column */
+    .pv2-col-text {
+      font-size: 10px;
+      line-height: 1.85;
+      padding-top: 3px;
+      position: relative;
+      z-index: 1;
+    }
+    .pv2-col-text p { margin-bottom: 14px; }
+    .pv2-col-text p:last-child { margin-bottom: 0; }
+
+    /* Credits */
+    .pv2-credits {
+      font-size: 9px;
+      color: rgba(0,0,0,0.38);
+      margin-top: 14px;
+      line-height: 1.65;
+    }
+
+    @media (max-width: 700px) {
+      .pv2-cols { grid-template-columns: 1fr; row-gap: 20px; }
+      .pv2-col-div { display: none; }
+      .pv2-section--alt .pv2-col-media,
+      .pv2-section--alt .pv2-col-div,
+      .pv2-section--alt .pv2-col-text { order: unset; }
+      .pv2-ghost { font-size: 80px; }
+      .pv2-portrait-wrap { max-width: 160px; }
+    }
+
+    /* Scroll-triggered animations */
+    .pv2-header {
+      opacity: 0;
+      transform: translateY(14px);
+      animation: pv2FadeUp 0.6s cubic-bezier(0.4,0,0.2,1) 0.05s forwards;
+    }
+    @keyframes pv2FadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .pv2-section-meta,
+    .pv2-col-media,
+    .pv2-col-text,
+    .pv2-solo {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.72s cubic-bezier(0.4,0,0.2,1),
+                  transform 0.72s cubic-bezier(0.4,0,0.2,1);
+    }
+    .pv2-section.pv2-visible .pv2-section-meta {
+      opacity: 1; transform: translateY(0); transition-delay: 0s;
+    }
+    .pv2-section.pv2-visible .pv2-col-media,
+    .pv2-section.pv2-visible .pv2-solo {
+      opacity: 1; transform: translateY(0); transition-delay: 0.13s;
+    }
+    .pv2-section.pv2-visible .pv2-col-text {
+      opacity: 1; transform: translateY(0); transition-delay: 0.24s;
+    }
+
+    /* ================================================
        INFORMATION PAGE
     ================================================ */
     .info-page { max-width: 780px; }
@@ -457,9 +641,99 @@
     }
 
     /* ================================================
-       PHOTO JOURNAL
+       PHOTOGRAPHY GALLERY
     ================================================ */
-    .photo-journal-grid { grid-template-columns: repeat(3, 1fr); }
+
+    /* Welcome screen — covers #main, fades out after camera draws */
+    .photo-welcome {
+      position: absolute;
+      inset: 0;
+      background: #FFFBF5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 300;
+      transition: opacity 0.8s ease;
+    }
+
+    /* SVG line-draw camera animation */
+    .loading-camera {
+      width: 110px;
+      color: #222;
+    }
+
+    .cam-body {
+      stroke-dasharray: 268;
+      stroke-dashoffset: 268;
+      animation: drawCamLine 0.9s cubic-bezier(0.4,0,0.2,1) 0s forwards;
+    }
+
+    .cam-finder {
+      stroke-dasharray: 54;
+      stroke-dashoffset: 54;
+      animation: drawCamLine 0.45s cubic-bezier(0.4,0,0.2,1) 0.2s forwards;
+    }
+
+    .cam-flash {
+      stroke-dasharray: 26;
+      stroke-dashoffset: 26;
+      animation: drawCamLine 0.35s cubic-bezier(0.4,0,0.2,1) 0.45s forwards;
+    }
+
+    .cam-lens-outer {
+      stroke-dasharray: 101;
+      stroke-dashoffset: 101;
+      animation: drawCamLine 0.7s cubic-bezier(0.4,0,0.2,1) 0.75s forwards;
+    }
+
+    .cam-lens-inner {
+      stroke-dasharray: 51;
+      stroke-dashoffset: 51;
+      animation: drawCamLine 0.5s cubic-bezier(0.4,0,0.2,1) 1.2s forwards;
+    }
+
+    @keyframes drawCamLine {
+      to { stroke-dashoffset: 0; }
+    }
+
+    /* Full-bleed gallery — breaks out of #main padding */
+    .photo-gallery-page {
+      margin: -18px -18px -40px -18px;
+      padding: 60px 72px;
+      min-height: 100vh;
+    }
+
+    /* Scrapbook: absolute-positioned items, JS-calculated layout */
+    .gallery-scrapbook {
+      position: relative;
+      min-height: 600px;
+      width: 100%;
+    }
+
+    .gallery-item {
+      position: absolute;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.85s ease, transform 0.85s ease;
+    }
+
+    .gallery-item.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      display: block;
+    }
+
+    /* Mobile: collapse to single-column flex */
+    @media (max-width: 768px) {
+      .photo-gallery-page { padding: 20px 16px; margin: -14px -12px -60px -12px; }
+      .gallery-scrapbook  { position: static; min-height: unset; display: flex; flex-direction: column; gap: 18px; }
+      .gallery-item       { position: static !important; width: auto !important; left: auto !important; top: auto !important; opacity: 1 !important; transform: none !important; }
+    }
 
     /* ================================================
        MOBILE
@@ -810,20 +1084,136 @@ function renderProject(slug) {
   const prev = PROJECTS[idx - 1] || null;
   const next = PROJECTS[idx + 1] || null;
 
-  // Photo Journal: full masonry grid of images
+  // Photography: animated welcome screen + full-bleed masonry gallery
   if (slug === 'Photography-Journal') {
-    const mediaHtml = project.media.length > 0
-      ? `<div class="masonry-grid photo-journal-grid">` +
-          project.media.map(m => `<div class="grid-item">${mediaEl(m)}</div>`).join('') +
-        `</div>`
-      : `<p style="font-size:10px;opacity:0.4">Add photos via admin.html to populate this page.</p>`;
+    document.title = 'Photography — Darren James Hummel';
+
+    const galleryHtml = project.media.map((m, i) =>
+      `<div class="gallery-item" id="gi-${i}"><img src="${m.src}" alt="" loading="eager"></div>`
+    ).join('');
 
     mainEl.innerHTML = `
-      <div class="project-page">
-        <div class="project-info"><div class="project-title">${project.title}</div></div>
-        ${mediaHtml}
-        ${navHtml(prev, next)}
+      <div class="photo-gallery-page">
+        <div class="photo-welcome" id="photoWelcome">
+          <svg class="loading-camera" viewBox="0 0 100 80" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect class="cam-body"       x="8"  y="26" width="84" height="46" rx="5" />
+            <rect class="cam-finder"     x="32" y="18" width="18" height="10" rx="3" />
+            <circle class="cam-flash"      cx="80" cy="38" r="4" />
+            <circle class="cam-lens-outer" cx="50" cy="49" r="16" />
+            <circle class="cam-lens-inner" cx="50" cy="49" r="8"  />
+          </svg>
+        </div>
+        <div class="gallery-scrapbook" id="galleryScrapbook">${galleryHtml}</div>
       </div>`;
+
+    // Fade out welcome once camera finishes drawing (~2s)
+    setTimeout(() => {
+      const welcome = document.getElementById('photoWelcome');
+      if (welcome) {
+        welcome.style.opacity = '0';
+        setTimeout(() => welcome.remove(), 850);
+      }
+    }, 2000);
+
+    // ── Scrapbook layout engine ──────────────────────────────────────
+    // If photos have been positioned in layout.html (m.pos), those exact
+    // positions are used — scaled proportionally to the current container width.
+    // Otherwise the auto two-track algorithm runs as a fallback.
+    function layoutScrapbook(media, container) {
+      if (!container) return;
+      const W = container.offsetWidth;
+      if (W < 10) return;
+
+      const EDITOR_W = 900; // layout.html canvas width
+      const scale    = W / EDITOR_W;
+
+      function getImgRatio(src) {
+        const m = src.match(/\/(\d+)\/(\d+)$/);
+        return m ? parseInt(m[1]) / parseInt(m[2]) : 1.5;
+      }
+
+      const hasCustomLayout = media.length > 0 && media[0].pos;
+
+      if (hasCustomLayout) {
+        // ── Use positions from layout.html editor ────────────────
+        let maxBottom = 0;
+        media.forEach((item, i) => {
+          const p     = item.pos;
+          const itemW = Math.round(W * p.w / 100);
+          const itemL = Math.round(W * p.x / 100);
+          const itemT = Math.round(p.y * scale);
+          const itemH = Math.round(itemW / getImgRatio(item.src));
+
+          const el = document.getElementById('gi-' + i);
+          if (el) {
+            el.style.width  = itemW + 'px';
+            el.style.left   = itemL + 'px';
+            el.style.top    = itemT + 'px';
+            el.style.zIndex = p.z || 1;
+          }
+          maxBottom = Math.max(maxBottom, itemT + itemH);
+        });
+        container.style.height = (maxBottom + 80) + 'px';
+
+      } else {
+        // ── Auto two-track algorithm (fallback) ──────────────────
+        const TRACK_GAP = 52;
+        const lW = Math.round(W * 0.41);
+        const rW = Math.round(W * 0.46);
+        const rL = lW + TRACK_GAP;
+        const tracks = [{ w: lW, l: 0 }, { w: rW, l: rL }];
+        const tH     = [60, 130];
+        const sizes   = [0.92, 0.66, 0.85, 0.56, 0.97, 0.72, 0.60, 0.89, 0.78, 0.50];
+        const offsets = [0.00, 0.09, 0.03, 0.13, 0.01, 0.11, 0.07, 0.15, 0.04, 0.10];
+
+        media.forEach((item, i) => {
+          const ti    = tH[0] <= tH[1] ? 0 : 1;
+          const t     = tracks[ti];
+          const itemW = Math.round(t.w * sizes[i % sizes.length]);
+          const itemL = Math.round(t.l + t.w * offsets[i % offsets.length]);
+          const itemH = Math.round(itemW / getImgRatio(item.src));
+
+          const el = document.getElementById('gi-' + i);
+          if (el) {
+            el.style.width  = itemW + 'px';
+            el.style.left   = itemL + 'px';
+            el.style.top    = tH[ti] + 'px';
+            el.style.zIndex = 1;
+          }
+          tH[ti] += itemH + 36 + Math.round(Math.abs(Math.sin(i * 1.8 + 1.2)) * 38);
+        });
+        container.style.height = (Math.max(...tH) + 80) + 'px';
+      }
+
+      // Scroll-triggered fade-in
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+        });
+      }, { threshold: 0.04 });
+      container.querySelectorAll('.gallery-item').forEach(el => obs.observe(el));
+    }
+
+    // Run after paint; retry once if layout hasn't happened yet
+    requestAnimationFrame(() => {
+      const c = document.getElementById('galleryScrapbook');
+      if (c && c.offsetWidth > 0) {
+        layoutScrapbook(project.media, c);
+      } else {
+        setTimeout(() => layoutScrapbook(project.media, document.getElementById('galleryScrapbook')), 120);
+      }
+    });
+
+    // Recalculate on resize
+    let _rt;
+    window.addEventListener('resize', () => {
+      clearTimeout(_rt);
+      _rt = setTimeout(() => {
+        const c = document.getElementById('galleryScrapbook');
+        if (c) { c.querySelectorAll('.gallery-item').forEach(el => el.classList.add('visible')); layoutScrapbook(project.media, c); }
+      }, 180);
+    });
+
     return;
   }
 
@@ -873,31 +1263,81 @@ function renderProject(slug) {
     return;
   }
 
-  // Default layout: first media item → hero, rest in grid below description
-  const hero = project.media[0] || null;
-  const rest  = project.media.slice(1);
+  // Default layout: numbered sections, video + text side-by-side (Primer-inspired)
+  const sections = project.media.map((m, i) => {
+    const num      = String(i + 1).padStart(2, '0');
+    const altClass = i % 2 === 1 ? ' pv2-section--alt' : '';
 
-  const heroHtml = hero
-    ? `<div class="project-hero${hero.portrait ? ' is-portrait' : ''}">${mediaEl(hero)}</div>`
-    : '';
+    // Pair description text: single video gets all paragraphs; multiple → 1:1 by index
+    const descText = project.media.length === 1
+      ? project.description.map(p => `<p>${p}</p>`).join('')
+      : (project.description[i] ? `<p>${project.description[i]}</p>` : '');
 
-  const additionalHtml = rest.length > 0
-    ? `<div class="project-media-grid">` +
-        rest.map(m => `<div class="project-media-item${m.portrait ? ' portrait' : ''}">${mediaEl(m)}</div>`).join('') +
-      `</div>`
+    // Credits go with the last section
+    const sectionCredits = (i === project.media.length - 1 && project.credits)
+      ? `<div class="pv2-credits">${project.credits}</div>`
+      : '';
+
+    const innerMedia = m.portrait
+      ? `<div class="pv2-portrait-wrap">${mediaEl(m)}</div>`
+      : mediaEl(m);
+
+    const metaRow = `
+      <div class="pv2-section-meta">
+        <div class="pv2-dot"></div>
+        <span class="pv2-num">${num}</span>
+        <div class="pv2-num-rule"></div>
+      </div>`;
+
+    if (descText || sectionCredits) {
+      return `
+        <div class="pv2-section${altClass}">
+          <div class="pv2-ghost">${num}</div>
+          ${metaRow}
+          <div class="pv2-cols">
+            <div class="pv2-col-media">${innerMedia}</div>
+            <div class="pv2-col-div"></div>
+            <div class="pv2-col-text">${descText}${sectionCredits}</div>
+          </div>
+        </div>`;
+    }
+    return `
+      <div class="pv2-section${altClass}">
+        <div class="pv2-ghost">${num}</div>
+        ${metaRow}
+        <div class="pv2-solo${m.portrait ? ' portrait' : ''}">${innerMedia}</div>
+      </div>`;
+  }).join('');
+
+  // If no media at all, show description in a clean block
+  const noMediaBlock = project.media.length === 0
+    ? `<div class="pv2-section"><div class="pv2-col-text" style="max-width:560px">${descHtml}${creditsHtml}</div></div>`
     : '';
 
   mainEl.innerHTML = `
-    <div class="project-page">
-      ${heroHtml}
-      <div class="project-info">
-        <div class="project-title">${project.title}</div>
-        <div class="project-description">${descHtml}</div>
-        ${creditsHtml}
+    <div class="project-page pv2">
+      <div class="pv2-header">
+        <div class="pv2-project-title">${project.title}</div>
+        <div class="pv2-header-rule"></div>
       </div>
-      ${additionalHtml}
+      ${sections}
+      ${noMediaBlock}
       ${navHtml(prev, next)}
     </div>`;
+
+  // Scroll-triggered fade-in for each section
+  requestAnimationFrame(() => {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('pv2-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.pv2-section').forEach(el => observer.observe(el));
+  });
 }
 
 
@@ -939,7 +1379,11 @@ function mediaEl(m) {
     return `<img src="${m.src}" loading="lazy" alt="">`;
   } else if (m.type === 'video') {
     return `<video src="${m.src}" autoplay loop muted playsinline></video>`;
-  } else if (m.type === 'vimeo' || m.type === 'youtube') {
+  } else if (m.type === 'vimeo') {
+    const sep = m.src.includes('?') ? '&' : '?';
+    const src = `${m.src}${sep}title=0&byline=0&portrait=0`;
+    return `<iframe src="${src}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe>`;
+  } else if (m.type === 'youtube') {
     return `<iframe src="${m.src}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe>`;
   }
   return '';

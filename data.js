@@ -22,13 +22,27 @@ const PROJECTS = [
   },
   {
     "slug": "Postmates-x-Coachella",
-    "title": "Postmates x Coachella",
+    "title": "Postmates",
     "credits": null,
     "description": [
-      "For Coachella 2024, I was brought on by the Dorothy Creative agency to capture their incredible Postmates Activation. This space was saucy! Benny Blanco had partnered with Postmates to concoct a Secret Sauce that was perfect for dipping in fries, tots, or even in a few signature Saucetail beverages.",
-      "We had a chance to capture with Benny when he stopped by the activation, and made sure to make it known that this was The space to stop by in the VIP Coachella space."
+      "The theme for Postmates x Coachella 2026 was \"Night Shift\". Los Angeles restaurant staple, Ggiata, partnered with Postmates to set up a ghost kitchen just outside of Coachella so festival-goers could still order their favorite late-night sandwich after everything else had closed. The goal: showcase how when Postmates pulls up, you're guaranteed to feel like a VIP. John Barrett and I teamed up again bringing the script to life — capturing Postmates activated inside private parties like 818 and Hailey Bieber's Rhode VIP events. We covered the whole grounds for it: drone aerials, ride-along shots with the buses, cutting the edit together as we shot so we knew we had every piece we needed to tell the story as big as the time we had would allow.",
+      "This case study is the Pizza Remix second act. After wrapping capture on-site at Coachella, I partnered with Dorothy and Postmates to convert what we captured into a wholistic case study video edit showcasing all of the key stats coming from everything surrounding Postmates' Coachella footprint. This involved me bringing the case study script to life with footage I captured along with additionally sourced assets, and bringing an edit to life with the same energy as the event itself. With this being an internal video, I chose to use headliner Charli XCX's song, Von Dutch, which matched the energy perfectly.",
+      "For Coachella 2025 I teamed up with Dorothy Creative Studio and award-winning cinematographer John Barrett to capture Postmates' \"Pizza Remix\" activation. The goal over the 3 days of coverage was to capture all of the best authentic reaction moments in a variety of creative and engaging ways. One of the key highlights was getting to lead the capture with Becky G, working a tight window to make sure she looked her best while delivering on Postmates' partnership needs.",
+      "For Coachella 2024, I was brought on by the Dorothy Creative agency to capture their incredible Postmates Activation. Benny Blanco had partnered with Postmates to concoct a Secret Sauce perfect for dipping in fries, tots, or even in a few signature Saucetail beverages. We had a chance to capture with Benny when he stopped by the activation, and made sure to make it known that this was the space to stop by in the VIP Coachella space."
     ],
     "media": [
+      {
+        "type": "vimeo",
+        "src": "https://player.vimeo.com/video/1209732894"
+      },
+      {
+        "type": "vimeo",
+        "src": "https://player.vimeo.com/video/1209732895"
+      },
+      {
+        "type": "vimeo",
+        "src": "https://player.vimeo.com/video/1209747213"
+      },
       {
         "type": "vimeo",
         "src": "https://player.vimeo.com/video/963662149"
@@ -446,10 +460,32 @@ const PROJECTS = [
   },
   {
     "slug": "Photography-Journal",
-    "title": "Photo Journal",
+    "title": "Photography",
     "credits": null,
     "description": [],
-    "media": []
+    "layout": "photo-gallery",
+    "media": [
+      { "type": "image", "src": "https://picsum.photos/seed/11/900/600" },
+      { "type": "image", "src": "https://picsum.photos/seed/10/600/900" },
+      { "type": "image", "src": "https://picsum.photos/seed/22/900/600" },
+      { "type": "image", "src": "https://picsum.photos/seed/15/600/900" },
+      { "type": "image", "src": "https://picsum.photos/seed/30/900/600" },
+      { "type": "image", "src": "https://picsum.photos/seed/41/900/600" },
+      { "type": "image", "src": "https://picsum.photos/seed/20/600/900" },
+      { "type": "image", "src": "https://picsum.photos/seed/52/900/600" },
+      { "type": "image", "src": "https://picsum.photos/seed/37/600/900" },
+      { "type": "image", "src": "https://picsum.photos/seed/63/900/600" },
+      { "type": "image", "src": "https://picsum.photos/seed/74/900/600" },
+      { "type": "image", "src": "https://picsum.photos/seed/43/600/900" },
+      { "type": "image", "src": "https://picsum.photos/seed/85/900/600" },
+      { "type": "image", "src": "https://picsum.photos/seed/90/900/600" },
+      { "type": "image", "src": "https://picsum.photos/seed/55/600/900" },
+      { "type": "image", "src": "https://picsum.photos/seed/95/900/600" },
+      { "type": "image", "src": "https://picsum.photos/seed/100/900/600" },
+      { "type": "image", "src": "https://picsum.photos/seed/67/600/900" },
+      { "type": "image", "src": "https://picsum.photos/seed/110/900/600" },
+      { "type": "image", "src": "https://picsum.photos/seed/82/600/900" }
+    ]
   },
   {
     "slug": "Magic",
