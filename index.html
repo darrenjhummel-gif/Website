@@ -1170,42 +1170,37 @@ function renderProject(slug) {
         container.style.height = (maxBottom + 120) + 'px';
 
       } else {
-        // ── Scrapbook layout: big photos, intentional overlap, subtle rotation ──
-        // Two columns that share a wide overlap zone in the middle.
-        const LEFT_W  = Math.round(W * 0.52);
-        const RIGHT_W = Math.round(W * 0.50);
-        const RIGHT_L = Math.round(W * 0.36);   // right col starts at 36% → 14% shared zone
-        const tracks  = [{ w: LEFT_W, l: 0 }, { w: RIGHT_W, l: RIGHT_L }];
-        const tH      = [40, 200];               // staggered starts
-
-        // Sizes as fraction of column width: mix of large, medium, small
-        const SIZES    = [0.88, 0.58, 0.78, 0.50, 0.92, 0.66, 0.54, 0.84, 0.70, 0.46];
-        // Small horizontal nudge so photos aren't all flush-left within their column
-        const X_OFF    = [0.00, 0.07, -0.02, 0.10, 0.01, 0.08, -0.04, 0.05, 0.02, 0.09];
-        // Subtle rotation — gives that "laid on a table" feel
-        const ROTS     = [0.8, -1.4, 1.9, -0.7, 1.3, -1.8, 0.5, -1.1, 2.1, -0.9];
+        // ── Single-stream scrapbook: photos weave left/right, big, overlapping ──
+        // One continuous Y cursor — photos alternate sides and pile up like a real scrapbook.
+        // Widths: large (55-65% of W) for even, medium-large (44-54%) for odd.
+        const WIDTHS = [0.60, 0.46, 0.58, 0.50, 0.64, 0.44, 0.56, 0.52, 0.62, 0.48];
+        // X positions: even = left-leaning, odd = right-leaning, with nudges
+        const X_L = [0.02, 0.06, 0.01, 0.08, 0.03];
+        const X_R = [0.36, 0.40, 0.34, 0.42, 0.38];
+        const ROTS = [1.1, -0.9, 1.8, -1.3, 0.6, -2.0, 1.4, -0.5, 2.2, -1.1];
+        let curY = 30;
 
         media.forEach((item, i) => {
-          const ti    = tH[0] <= tH[1] ? 0 : 1;
-          const t     = tracks[ti];
-          const itemW = Math.round(t.w * SIZES[i % SIZES.length]);
-          const itemL = Math.max(0, t.l + Math.round(t.w * X_OFF[i % X_OFF.length]));
-          const rot   = ROTS[i % ROTS.length];
-          const ratio = getItemRatio(i, item.src);
-          const itemH = Math.round(itemW / (ratio || 0.75));
+          const isLeft = i % 2 === 0;
+          const itemW  = Math.round(W * WIDTHS[i % WIDTHS.length]);
+          const xPct   = isLeft ? X_L[Math.floor(i/2) % X_L.length] : X_R[Math.floor(i/2) % X_R.length];
+          const itemL  = Math.round(W * xPct);
+          const rot    = ROTS[i % ROTS.length];
+          const ratio  = getItemRatio(i, item.src);
+          const itemH  = Math.round(itemW / (ratio || 0.75));
 
           const el = document.getElementById('gi-' + i);
           if (el) {
             el.style.width     = itemW + 'px';
             el.style.left      = itemL + 'px';
-            el.style.top       = tH[ti] + 'px';
+            el.style.top       = curY + 'px';
             el.style.transform = `rotate(${rot}deg)`;
-            el.style.zIndex    = i + 1;         // each photo stacks on top of previous
+            el.style.zIndex    = i + 1;
           }
-          // Advance by 80% of height = intentional 20% overlap between photos in same column
-          tH[ti] += Math.round(itemH * 0.80) + 20;
+          // Advance by 72% of height = 28% overlap between consecutive photos
+          curY += Math.round(itemH * 0.72) + 8;
         });
-        container.style.height = (Math.max(...tH) + 120) + 'px';
+        container.style.height = curY + 120 + 'px';
       }
 
       // Re-run once after images load to use correct naturalWidth/Height ratios
