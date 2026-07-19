@@ -1176,8 +1176,8 @@ function renderProject(slug) {
         const rL = lW + TRACK_GAP;
         const tracks = [{ w: lW, l: 0 }, { w: rW, l: rL }];
         // Start tracks staggered
-        const tH     = [80, 280];
-        // Small photos — Brook Pifer scale, plenty of breathing room
+        const tH     = [40, 160];
+        // Small photos — Brook Pifer scale
         const sizes   = [0.42, 0.26, 0.36, 0.20, 0.44, 0.30, 0.24, 0.40, 0.32, 0.18];
         const offsets = [0.00, 0.08, 0.03, 0.12, 0.01, 0.10, 0.06, 0.14, 0.03, 0.09];
 
@@ -1198,10 +1198,10 @@ function renderProject(slug) {
             el.style.top    = tH[ti] + 'px';
             el.style.zIndex = 1;
           }
-          // Generous gap: 160px base + up to 140px organic variation
-          tH[ti] += itemH + 160 + Math.round(Math.abs(Math.sin(i * 1.8 + 1.2)) * 140);
+          // Gap: 55px base + up to 70px organic variation
+          tH[ti] += itemH + 55 + Math.round(Math.abs(Math.sin(i * 1.8 + 1.2)) * 70);
         });
-        container.style.height = (Math.max(...tH) + 200) + 'px';
+        container.style.height = (Math.max(...tH) + 100) + 'px';
       }
 
       // Re-run once after images load to use correct naturalWidth/Height ratios
