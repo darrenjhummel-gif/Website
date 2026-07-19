@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Photo Importer — Darren Hummel</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #1a1a1a;
+      color: #e0e0e0;
+      font-size: 11px;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    header {
+      padding: 13px 20px;
+      border-bottom: 1px solid #2e2e2e;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+    header h1 { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+    header .sub { font-size: 10px; color: #666; }
+    .main { display: flex; flex: 1; overflow: hidden; }
+
+    /* Left panel */
+    .left-panel {
+      width: 300px;
+      flex-shrink: 0;
+      border-right: 1px solid #2e2e2e;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+    .section { padding: 14px 16px; border-bottom: 1px solid #252525; }
+    .label {
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.13em; color: #777; margin-bottom: 9px;
+    }
+    input[type="text"], textarea {
+      width: 100%;
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 3px;
+      color: #ddd;
+      font-size: 10px;
+      font-family: monospace;
+      padding: 7px 9px;
+      outline: none;
+    }
+    input[type="text"] { margin-bottom: 7px; }
+    input[type="text"]:focus, textarea:focus { border-color: #FF9F1C; }
+    input[type="text"]::placeholder, textarea::placeholder { color: #444; }
+    textarea { height: 120px; resize: none; line-height: 1.55; }
+    .hint { font-size: 9px; color: #555; line-height: 1.55; margin-top: 7px; }
+    .hint b { color: #FF9F1C; font-weight: 600; }
+    .stat { font-size: 10px; color: #666; margin-top: 8px; }
+    .stat b { color: #FF9F1C; }
+    .btn-row { display: flex; gap: 7px; margin-top: 10px; }
+    button {
+      padding: 7px 13px; border: none; border-radius: 3px;
+      font-size: 9px; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; cursor: pointer; transition: opacity 0.15s;
+    }
+    button:hover { opacity: 0.8; }
+    .btn-primary  { background: #FF9F1C; color: #000; }
+    .btn-ghost    { background: #2a2a2a; color: #999; }
+    .btn-copy     { background: transparent; color: #FF9F1C; border: 1px solid #FF9F1C; }
+    .btn-connect  { width: 100%; padding: 9px; background: #FF9F1C; color: #000; border: none; border-radius: 3px; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; }
+    .btn-connect:hover { opacity: 0.85; }
+    .divider {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 16px; color: #3a3a3a; font-size: 9px;
+      font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: #252525; }
+    .output-wrap { flex: 1; display: flex; flex-direction: column; padding: 14px 16px; min-height: 200px; }
+    .output-box {
+      flex: 1; background: #111; border: 1px solid #2e2e2e;
+      border-radius: 3px; padding: 10px; font-family: monospace;
+      font-size: 10px; color: #888; overflow-y: auto;
+      white-space: pre; line-height: 1.55; min-height: 120px;
+    }
+    .copied { animation: flashGreen 0.4s ease; }
+    @keyframes flashGreen { 50% { color: #4caf50; border-color: #4caf50; } }
+
+    /* Right panel */
+    .right-panel { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .grid-header {
+      padding: 14px 16px 10px; display: flex; align-items: center;
+      justify-content: space-between; border-bottom: 1px solid #252525; flex-shrink: 0;
+    }
+    .photo-grid {
+      flex: 1; overflow-y: auto; padding: 12px;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 6px; align-content: start;
+    }
+    .empty-msg {
+      grid-column: 1/-1; text-align: center; padding: 80px 20px;
+      color: #444; font-size: 11px; line-height: 1.8;
+    }
+    .thumb {
+      aspect-ratio: 1; border-radius: 3px; overflow: hidden; cursor: pointer;
+      position: relative; border: 2px solid transparent;
+      transition: border-color 0.15s, transform 0.1s; background: #111;
+    }
+    .thumb:hover { transform: scale(1.03); }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .thumb.hero-shot { border-color: #FF9F1C; }
+    .thumb .hero-badge {
+      position: absolute; top: 5px; right: 5px; background: #FF9F1C;
+      color: #000; font-size: 7px; font-weight: 800; letter-spacing: 0.06em;
+      padding: 2px 5px; border-radius: 2px; display: none;
+    }
+    .thumb.hero-shot .hero-badge { display: block; }
+    .thumb .num {
+      position: absolute; bottom: 4px; left: 5px;
+      background: rgba(0,0,0,0.65); color: rgba(255,255,255,0.7);
+      font-size: 8px; padding: 1px 4px; border-radius: 2px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Photo Importer</h1>
+  <div class="sub">Connect Cloudinary → select all photos → mark hero shots → copy JSON into data.js</div>
+</header>
+
+<div class="main">
+  <!-- Left panel -->
+  <div class="left-panel">
+
+    <!-- Step 1: Cloudinary connect -->
+    <div class="section">
+      <div class="label">Step 1 — Connect to Cloudinary</div>
+      <input type="text" id="cloudName" placeholder="Cloud name (e.g. mjqpsqlg)" value="mjqpsqlg">
+      <input type="text" id="apiKey" placeholder="API Key — Settings → Access Keys">
+      <button class="btn-connect" onclick="openCloudinaryLibrary()">Open My Cloudinary Library</button>
+      <div class="hint" style="margin-top:8px">
+        Navigate to <b>Trevel_Gallery</b>, select all photos, click <b>Insert</b>.
+        URLs import here automatically.<br><br>
+        Your API Key is a public identifier — not your secret. Safe to enter here.
+      </div>
+      <div class="stat" id="importStat"></div>
+    </div>
+
+    <div class="divider">or paste URLs manually</div>
+
+    <!-- Step 1b: Manual paste -->
+    <div class="section">
+      <div class="label">Paste URLs (one per line)</div>
+      <textarea id="urlInput" placeholder="https://res.cloudinary.com/mjqpsqlg/image/upload/Trevel_Gallery/photo.jpg"></textarea>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="importUrls()">Import</button>
+        <button class="btn-ghost" onclick="clearAll()">Clear All</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Hero tip -->
+    <div class="section">
+      <div class="label">Step 2 — Mark Hero Shots</div>
+      <div class="hint" style="color:#888">
+        Click any photo in the grid to mark it as a <b>hero shot</b> — displayed larger in the gallery. Aim for 10–20 standout images out of your full set.
+      </div>
+      <div class="stat" id="heroStat"></div>
+    </div>
+
+    <!-- Step 3: Output -->
+    <div class="output-wrap">
+      <div class="label">Step 3 — Copy JSON → paste into data.js</div>
+      <div class="output-box" id="outputBox">// Connect or paste URLs above to generate JSON</div>
+      <div class="btn-row" style="margin-top:10px">
+        <button class="btn-copy" id="copyBtn" onclick="copyJson()">Copy JSON</button>
+        <button class="btn-ghost" onclick="generateJson()">Refresh</button>
+      </div>
+      <div class="hint" style="margin-top:8px">
+        In data.js, find the Photography-Journal entry and replace its <b>media</b> array with this output.
+      </div>
+    </div>
+  </div>
+
+  <!-- Right panel: photo grid -->
+  <div class="right-panel">
+    <div class="grid-header">
+      <div class="label" style="margin:0">Preview — click to toggle hero shot</div>
+      <div class="stat" id="gridStat"></div>
+    </div>
+    <div class="photo-grid" id="photoGrid">
+      <div class="empty-msg">
+        Connect Cloudinary above and select your photos<br>
+        — or paste URLs manually —<br>
+        <span style="color:#333">then click photos here to mark hero shots</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://media-library.cloudinary.com/global/all.js"></script>
+<script>
+  let photos = [];
+  let mlWidget = null;
+
+  /* ── Cloudinary library widget ── */
+  function openCloudinaryLibrary() {
+    const cloudName = document.getElementById('cloudName').value.trim();
+    const apiKey    = document.getElementById('apiKey').value.trim();
+
+    if (!cloudName) { alert('Enter your Cloudinary cloud name first.'); return; }
+    if (!apiKey)    { alert('Enter your API Key first.\nFind it in Cloudinary → Settings → Access Keys.'); return; }
+
+    if (mlWidget) {
+      mlWidget.show();
+      return;
+    }
+
+    mlWidget = cloudinary.createMediaLibrary(
+      {
+        cloud_name:  cloudName,
+        api_key:     apiKey,
+        multiple:    true,
+        max_files:   400,
+        insert_caption: 'Import Selected Photos',
+      },
+      {
+        insertHandler: function(data) {
+          if (!data || !data.assets || !data.assets.length) return;
+
+          const existingUrls = new Set(photos.map(p => p.url));
+          const incoming = data.assets
+            .map(a => cleanUrl(a.secure_url))
+            .filter(u => !existingUrls.has(u))
+            .map(u => ({ url: u, hero: false }));
+
+          photos = [...photos, ...incoming];
+          renderGrid();
+          generateJson();
+          document.getElementById('importStat').innerHTML =
+            `<b>${photos.length}</b> photos loaded`;
+        }
+      }
+    );
+    mlWidget.show();
+  }
+
+  /* ── Manual URL paste ── */
+  function importUrls() {
+    const raw = document.getElementById('urlInput').value.trim();
+    if (!raw) return;
+
+    const lines = raw.split('\n').map(l => l.trim()).filter(l => l.startsWith('http'));
+    if (!lines.length) { alert('No valid URLs found. Each URL should start with https://'); return; }
+
+    const existingUrls = new Set(photos.map(p => p.url));
+    const incoming = lines
+      .map(cleanUrl)
+      .filter(u => !existingUrls.has(u))
+      .map(u => ({ url: u, hero: false }));
+
+    photos = [...photos, ...incoming];
+    renderGrid();
+    generateJson();
+    document.getElementById('importStat').innerHTML = `<b>${photos.length}</b> photos loaded`;
+  }
+
+  function cleanUrl(url) {
+    try {
+      const u = new URL(url);
+      ['share','fl','fe','_i'].forEach(k => u.searchParams.delete(k));
+      const s = u.search === '?' ? '' : u.search;
+      return u.origin + u.pathname + s;
+    } catch { return url; }
+  }
+
+  function thumbSrc(url) {
+    if (url.includes('res.cloudinary.com') && url.includes('/upload/')) {
+      return url.replace('/upload/', '/upload/w_220,h_220,c_fill,q_auto,f_auto/');
+    }
+    return url;
+  }
+
+  /* ── Grid render ── */
+  function renderGrid() {
+    const grid = document.getElementById('photoGrid');
+    if (!photos.length) {
+      grid.innerHTML = '<div class="empty-msg">No photos yet</div>';
+      return;
+    }
+    grid.innerHTML = photos.map((p, i) => `
+      <div class="thumb${p.hero ? ' hero-shot' : ''}" id="t${i}" onclick="toggleHero(${i})">
+        <img src="${thumbSrc(p.url)}" loading="lazy" alt="">
+        <div class="hero-badge">HERO</div>
+        <div class="num">${i + 1}</div>
+      </div>`).join('');
+    updateCounts();
+  }
+
+  function toggleHero(i) {
+    photos[i].hero = !photos[i].hero;
+    const el = document.getElementById('t' + i);
+    el.classList.toggle('hero-shot', photos[i].hero);
+    el.querySelector('.hero-badge').style.display = photos[i].hero ? 'block' : 'none';
+    updateCounts();
+    generateJson();
+  }
+
+  /* ── JSON output ── */
+  function generateJson() {
+    if (!photos.length) return;
+    const lines = photos.map(p => {
+      const obj = { type: 'image', src: p.url };
+      if (p.hero) obj.hero = true;
+      return '    ' + JSON.stringify(obj);
+    });
+    document.getElementById('outputBox').textContent =
+      '"media": [\n' + lines.join(',\n') + '\n  ]';
+  }
+
+  function copyJson() {
+    const text = document.getElementById('outputBox').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById('copyBtn');
+      const orig = btn.textContent;
+      btn.textContent = '✓ Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 1800);
+    });
+  }
+
+  function clearAll() {
+    if (photos.length && !confirm('Clear all photos?')) return;
+    photos = [];
+    mlWidget = null;
+    document.getElementById('urlInput').value = '';
+    document.getElementById('outputBox').textContent = '// Connect or paste URLs above to generate JSON';
+    document.getElementById('importStat').textContent = '';
+    document.getElementById('heroStat').textContent = '';
+    document.getElementById('gridStat').textContent = '';
+    document.getElementById('photoGrid').innerHTML =
+      '<div class="empty-msg">Connect Cloudinary above and select your photos<br>— or paste URLs manually —</div>';
+  }
+
+  function updateCounts() {
+    const h = photos.filter(p => p.hero).length;
+    document.getElementById('heroStat').innerHTML = h ? `<b>${h}</b> hero shots marked` : 'None marked yet';
+    document.getElementById('gridStat').innerHTML =
+      `<b>${photos.length}</b> photos &nbsp;·&nbsp; <b style="color:#FF9F1C">${h}</b> heroes`;
+  }
+</script>
+</body>
+</html>
