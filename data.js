@@ -1,6 +1,6 @@
 // ================================================================
 //  DARREN JAMES HUMMEL — SITE DATA
-//  Managed via admin.html. Last exported: 7/7/2026, 10:23:05 AM
+//  Managed via admin.html. Last exported: 7/6/2026 (auto-scraped from Cargo)
 // ================================================================
 
 const PROJECTS = [
@@ -14,10 +14,7 @@ const PROJECTS = [
       "I served as director, cinematographer, and editor, crafting a suite of short-form vertical stories for social along with a high-energy recap film capturing Pepsi's full Super Bowl presence. The final piece became the anchor film for Pepsi's internal Super Bowl showcase and post-event marketing, helping pave the way for even larger future activations."
     ],
     "media": [
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/1134015249"
-      }
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/1134015249" }
     ]
   },
   {
@@ -31,22 +28,10 @@ const PROJECTS = [
       "For Coachella 2024, I was brought on by the Dorothy Creative agency to capture their incredible Postmates Activation. Benny Blanco had partnered with Postmates to concoct a Secret Sauce perfect for dipping in fries, tots, or even in a few signature Saucetail beverages. We had a chance to capture with Benny when he stopped by the activation, and made sure to make it known that this was the space to stop by in the VIP Coachella space."
     ],
     "media": [
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/1209732894"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/1209732895"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/1209747213"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/963662149"
-      }
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/1209732894" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/1209732895" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/1209747213" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/963662149" }
     ]
   },
   {
@@ -59,43 +44,20 @@ const PROJECTS = [
       "Post-launch, our team hit the road — capturing real-world reactions and activations at Supercross events nationwide. I directed and filmed on-site content, created event recaps, and continued driving awareness through consistent social storytelling. The campaign established Dryft Board's visual identity and continued conversations about innovations in the emerging electric-motion space."
     ],
     "media": [
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/1134057616"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/1134056171"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/1134056616"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/1134057215"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/1134057481"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/1134057525"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/1134058080"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/1134058235"
-      }
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/1134057616" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/1134056171" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/1134056616" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/1134057215" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/1134057481" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/1134057525" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/1134058080" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/1134058235" }
     ]
   },
   {
     "slug": "Graffeo-Coffee",
     "title": "Graffeo Coffee",
+    "layout": "media-top",
     "credits": null,
     "description": [
       "Here's how we turned a Ferrari into a viral espresso bar — When Walter Haas, a new investor in San Francisco's oldest Italian coffee roaster, asked me to make Graffeo Coffee go viral, I took the challenge head-on. His wild idea — turning a vintage 1980s Ferrari into a mobile espresso bar — was too good not to capture. Partnering with strategist Yasmin Buarque, we built a full campaign rollout to launch Graffeo's first social presence, from viral-day content to a long-term editorial plan.",
@@ -103,22 +65,10 @@ const PROJECTS = [
       "The teaser post alone hit 1M views in 24 hours, organically growing Graffeo's account by 10K followers in a week. What started as a stunt became a case study in how a legacy brand can reignite its identity through bold creativity, authentic storytelling, and community-driven strategy."
     ],
     "media": [
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/1134036418"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/1134026843"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/1134027597"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/1134027934"
-      }
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/1134036418" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/1134026843" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/1134027597" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/1134027934" }
     ]
   },
   {
@@ -132,62 +82,20 @@ const PROJECTS = [
       "WWE — C4 Energy was a major sponsor at WWE SummerSlam. They hosted a massive fan experience the day before, with Seth 'Freakin' Rollins and Rhea Ripley. I was brought on to conceptualize and execute a bank of content for the day — pivoting on the fly when production assets never arrived."
     ],
     "media": [
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/963626166"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/862243130"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/862243200"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/862243290"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/862243045"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/862242874"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/862258075"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/862257760"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/862257728"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/862257620"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/862257952"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/862257863"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/862257811"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/862257574"
-      }
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/963626166" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/862243130" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/862243200" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/862243290" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/862243045" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/862242874" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/862258075" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/862257760" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/862257728" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/862257620" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/862257952" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/862257863" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/862257811" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/862257574" }
     ]
   },
   {
@@ -199,10 +107,7 @@ const PROJECTS = [
       "The challenge was to take a typical talking head interview and make it feel not only fun and engaging, but also acutely curated to the subject. Myself and the incredibly talented DP, Zayd Ezzeldine, met up with Sam in his Miami house and captured his interview along with some super fun B-roll."
     ],
     "media": [
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/861415253"
-      }
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/861415253" }
     ]
   },
   {
@@ -214,26 +119,11 @@ const PROJECTS = [
       "I came on as creative director, shooter, and editor to bring the concepts to life. These were all shot in a small studio setting with the assistance of my producer, Salvador Falcón."
     ],
     "media": [
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/861416857"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/861416966"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/861417085"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/861423160"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/861423411"
-      }
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/861416857" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/861416966" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/861417085" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/861423160" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/861423411" }
     ]
   },
   {
@@ -247,58 +137,19 @@ const PROJECTS = [
       "Sports Research Lab — Shot on location at the first ever Blue Ribbon Sports, now home of Nike's NSRL Experience. NSRL puts Nike Members in the hot seat with a running analysis and personal guidance. With behavioral therapist and LA runner Maya Gutierrez, our goal was to get members excited about the NSRL experience."
     ],
     "media": [
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/980864897"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/980867590"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/980867922"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/980866879"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/980871181"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/862257129"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/862246327"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/862246385"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/862246159"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/862246251"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/862246293"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/862246124"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/865170181"
-      }
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/980864897" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/980867590" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/980867922" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/980866879" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/980871181" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/862257129" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/862246327" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/862246385" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/862246159" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/862246251" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/862246293" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/862246124" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/865170181" }
     ]
   },
   {
@@ -310,10 +161,7 @@ const PROJECTS = [
       "I was brought on as director/shooter/editor to capture this collaborative journey, and had the pleasure of working alongside the amazing West Productions."
     ],
     "media": [
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/861421743"
-      }
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/861421743" }
     ]
   },
   {
@@ -327,62 +175,20 @@ const PROJECTS = [
       "Tiny World — Just as Jack in the Box was entering the world of platform-specific social content, they reached out to Conscious Minds studios for creative ideas to jump start their launch. After CM landed on the concept of 'Big Flavor, Tiny World', they brought me on as the official Tiny World maker."
     ],
     "media": [
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/863379950"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/863380579"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/863381212"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/863401103"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/863401258"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/863401177"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/863401069"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/862247123"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/862247398"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/862247255"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/862247200"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/862247425"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/862247346"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/862247166"
-      }
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/863379950" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/863380579" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/863381212" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/863401103" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/863401258" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/863401177" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/863401069" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/862247123" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/862247398" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/862247255" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/862247200" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/862247425" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/862247346" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/862247166" }
     ]
   },
   {
@@ -394,34 +200,27 @@ const PROJECTS = [
       "I was brought on to lead a small production team in capturing footage and stills of the event, with the plan of delivering individual social assets per each sponsor immediately after. We set up a war room edit hub in one of the Pebble Beach store offices, and had hourly footage dumps throughout the event to ensure a smooth quick-turn editorial process."
     ],
     "media": [
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/862258689"
-      }
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/862258689" }
     ]
   },
   {
     "slug": "Greenhouse",
     "title": "Greenhouse",
+    "layout": "media-top",
     "credits": null,
     "description": [
       "Conscious Minds Studios created an employee-focused initiative, Greenhouse Project, that allowed individuals to submit their dream project that they wanted to bring to life. The grant provides a set-aside amount of time, funds, and resources for the chosen employee to execute their dream.",
       "I led the charge of documenting the Greenhouse experience with the first two winners, Jesús Acosta and Brooke Estell."
     ],
     "media": [
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/865619936"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/865621170"
-      }
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/865619936" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/865621170" }
     ]
   },
   {
     "slug": "Short-Films",
     "title": "Short Films",
+    "layout": "film-list",
     "credits": null,
     "description": [
       "Lost & Found — In the midst of tidying up, Darren discovers a forgotten magic drawer that teleports him to rediscovering a once lost wonder. Shot mostly solo with an automatic dolly, with 100% of sound design recreated in post production.",
@@ -432,30 +231,12 @@ const PROJECTS = [
       "Gotta Go — A down-on-his-luck real estate agent discovers an amazing mystery in the men's room. Winner: Greensboro 48HFP Best Film, Audience Favorite, Best Writing, Best Actor & Actress (Comedy). Selected for the Cannes Film Festival Short Film Corner."
     ],
     "media": [
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/874417606"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/793530381"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/793534076"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/359528911"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/223791467"
-      },
-      {
-        "type": "vimeo",
-        "src": "https://player.vimeo.com/video/133664721"
-      }
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/874417606" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/793530381" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/793534076" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/359528911" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/223791467" },
+      { "type": "vimeo", "src": "https://player.vimeo.com/video/133664721" }
     ]
   },
   {
@@ -464,7 +245,7 @@ const PROJECTS = [
     "credits": null,
     "description": [],
     "layout": "photo-gallery",
-    "media": ["media": [
+    "media": [
     {"type":"image","src":"https://res.cloudinary.com/mjqpsqlg/image/upload/v1784413069/DSC03256_haadpw.jpg","hero":true},
     {"type":"image","src":"https://res.cloudinary.com/mjqpsqlg/image/upload/v1784412681/DSC01743_kgohwi.jpg"},
     {"type":"image","src":"https://res.cloudinary.com/mjqpsqlg/image/upload/v1784413069/DSC03242_pndx86.jpg"},
@@ -652,7 +433,6 @@ const PROJECTS = [
     {"type":"image","src":"https://res.cloudinary.com/mjqpsqlg/image/upload/v1784412687/DSC01755_vtrfpb.jpg"},
     {"type":"image","src":"https://res.cloudinary.com/mjqpsqlg/image/upload/v1784412685/DSC01754_wmiwjb.jpg"},
     {"type":"image","src":"https://res.cloudinary.com/mjqpsqlg/image/upload/v1784412681/DSC01746_c2q8ph.jpg"}
-  ]
     ]
   },
   {
@@ -670,8 +450,8 @@ const GRID_ITEMS = [
   {
     "col": 1,
     "type": "video",
-    "src": "./assets/Adidas-OnDeck-01.mp4",
-    "project": null
+    "src": "./assets/Pepsi-Grab.mp4",
+    "project": "Pepsi-x-Super-Bowl-LIX"
   },
   {
     "col": 1,
@@ -790,8 +570,8 @@ const GRID_ITEMS = [
   {
     "col": 3,
     "type": "video",
-    "src": "./assets/Pepsi-Grab.mp4",
-    "project": "Pepsi-x-Super-Bowl-LIX"
+    "src": "./assets/Adidas-OnDeck-01.mp4",
+    "project": null
   },
   {
     "col": 3,
@@ -850,7 +630,7 @@ const GRID_ITEMS = [
 ];
 
 const INFO = {
-  "photo": "./assets/darren-photo.jpeg",
+  "photo": "",
   "bio": [
     "Darren is a versatile creative professional with a passion for visual storytelling. A graduate of the UNC School of the Arts in Winston-Salem, NC, Darren quickly found himself in the fast-paced, highly creative world of advertising.",
     "With a dynamic career that spans editing, directing, post producing, and cinematography, Darren has amassed an impressive portfolio of editorial and commercial work. Notable clients such as Nike, Cetaphil, Jack in the Box, C4 Energy, and Roblox have all benefited from Darren's sought-after talent and discerning creative vision.",
