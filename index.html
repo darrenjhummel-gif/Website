@@ -723,7 +723,8 @@
       transform: translateY(0);
     }
 
-    .gallery-item img {
+    .gallery-item img,
+    .gallery-item video {
       width: 100%;
       display: block;
     }
@@ -1088,9 +1089,12 @@ function renderProject(slug) {
   if (slug === 'Photography-Journal') {
     document.title = 'Photography — Darren James Hummel';
 
-    const galleryHtml = project.media.map((m, i) =>
-      `<div class="gallery-item" id="gi-${i}"><img src="${m.src}" alt="" loading="eager"></div>`
-    ).join('');
+    const galleryHtml = project.media.map((m, i) => {
+      const mediaEl = m.type === 'video'
+        ? `<video src="${m.src}" autoplay loop muted playsinline></video>`
+        : `<img src="${m.src}" alt="" loading="eager">`;
+      return `<div class="gallery-item" id="gi-${i}">${mediaEl}</div>`;
+    }).join('');
 
     mainEl.innerHTML = `
       <div class="photo-gallery-page">
@@ -1127,13 +1131,16 @@ function renderProject(slug) {
       const EDITOR_W = 900;
       const scale    = W / EDITOR_W;
 
-      // Use actual loaded image dimensions when available; fall back to picsum pattern or 0.75.
-      // 0.75 is intentionally tall — it over-estimates height for both portrait and landscape,
-      // so the initial pass never causes overlap before images have loaded.
+      // Use actual loaded media dimensions when available; fall back to 0.75.
+      // 0.75 is intentionally tall — it over-estimates height for both portrait and landscape
+      // so the initial pass never causes overlap before media has loaded.
       function getItemRatio(i, src) {
         const el = document.getElementById('gi-' + i);
-        const img = el && el.querySelector('img');
+        if (!el) return 0.75;
+        const img = el.querySelector('img');
         if (img && img.naturalWidth > 0) return img.naturalWidth / img.naturalHeight;
+        const vid = el.querySelector('video');
+        if (vid && vid.videoWidth > 0) return vid.videoWidth / vid.videoHeight;
         const m = src.match(/\/(\d+)\/(\d+)$/);
         return m ? parseInt(m[1]) / parseInt(m[2]) : 0.75;
       }
@@ -1170,8 +1177,8 @@ function renderProject(slug) {
         const tracks = [{ w: lW, l: 0 }, { w: rW, l: rL }];
         // Start tracks staggered
         const tH     = [80, 280];
-        // Smaller photos — max ~70% of already-narrow track
-        const sizes   = [0.68, 0.44, 0.60, 0.36, 0.70, 0.50, 0.40, 0.64, 0.54, 0.34];
+        // Small photos — Brook Pifer scale, plenty of breathing room
+        const sizes   = [0.42, 0.26, 0.36, 0.20, 0.44, 0.30, 0.24, 0.40, 0.32, 0.18];
         const offsets = [0.00, 0.08, 0.03, 0.12, 0.01, 0.10, 0.06, 0.14, 0.03, 0.09];
 
         media.forEach((item, i) => {
