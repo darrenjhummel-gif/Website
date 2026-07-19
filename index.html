@@ -1119,15 +1119,19 @@ function renderProject(slug) {
     // If photos have been positioned in layout.html (m.pos), those exact
     // positions are used — scaled proportionally to the current container width.
     // Otherwise the auto two-track algorithm runs as a fallback.
-    function layoutScrapbook(media, container) {
+    function layoutScrapbook(media, container, isRelayout) {
       if (!container) return;
       const W = container.offsetWidth;
       if (W < 10) return;
 
-      const EDITOR_W = 900; // layout.html canvas width
+      const EDITOR_W = 900;
       const scale    = W / EDITOR_W;
 
-      function getImgRatio(src) {
+      // Use actual loaded image dimensions when available; fall back to picsum pattern or 1.5
+      function getItemRatio(i, src) {
+        const el = document.getElementById('gi-' + i);
+        const img = el && el.querySelector('img');
+        if (img && img.naturalWidth > 0) return img.naturalWidth / img.naturalHeight;
         const m = src.match(/\/(\d+)\/(\d+)$/);
         return m ? parseInt(m[1]) / parseInt(m[2]) : 1.5;
       }
@@ -1142,7 +1146,7 @@ function renderProject(slug) {
           const itemW = Math.round(W * p.w / 100);
           const itemL = Math.round(W * p.x / 100);
           const itemT = Math.round(p.y * scale);
-          const itemH = Math.round(itemW / getImgRatio(item.src));
+          const itemH = Math.round(itemW / getItemRatio(i, item.src));
 
           const el = document.getElementById('gi-' + i);
           if (el) {
@@ -1153,25 +1157,27 @@ function renderProject(slug) {
           }
           maxBottom = Math.max(maxBottom, itemT + itemH);
         });
-        container.style.height = (maxBottom + 80) + 'px';
+        container.style.height = (maxBottom + 120) + 'px';
 
       } else {
-        // ── Auto two-track algorithm (fallback) ──────────────────
-        const TRACK_GAP = 52;
+        // ── Auto two-track algorithm ──────────────────────────────
+        const TRACK_GAP = 64;
         const lW = Math.round(W * 0.41);
-        const rW = Math.round(W * 0.46);
+        const rW = Math.round(W * 0.45);
         const rL = lW + TRACK_GAP;
         const tracks = [{ w: lW, l: 0 }, { w: rW, l: rL }];
-        const tH     = [60, 130];
-        const sizes   = [0.92, 0.66, 0.85, 0.56, 0.97, 0.72, 0.60, 0.89, 0.78, 0.50];
-        const offsets = [0.00, 0.09, 0.03, 0.13, 0.01, 0.11, 0.07, 0.15, 0.04, 0.10];
+        // Start tracks staggered so they interleave nicely
+        const tH     = [100, 260];
+        const sizes   = [0.90, 0.62, 0.82, 0.54, 0.94, 0.70, 0.58, 0.86, 0.76, 0.50];
+        const offsets = [0.00, 0.08, 0.03, 0.12, 0.01, 0.10, 0.06, 0.14, 0.03, 0.09];
 
         media.forEach((item, i) => {
           const ti    = tH[0] <= tH[1] ? 0 : 1;
           const t     = tracks[ti];
           const itemW = Math.round(t.w * sizes[i % sizes.length]);
           const itemL = Math.round(t.l + t.w * offsets[i % offsets.length]);
-          const itemH = Math.round(itemW / getImgRatio(item.src));
+          const ratio = getItemRatio(i, item.src);
+          const itemH = Math.round(itemW / ratio);
 
           const el = document.getElementById('gi-' + i);
           if (el) {
@@ -1180,18 +1186,37 @@ function renderProject(slug) {
             el.style.top    = tH[ti] + 'px';
             el.style.zIndex = 1;
           }
-          tH[ti] += itemH + 36 + Math.round(Math.abs(Math.sin(i * 1.8 + 1.2)) * 38);
+          // Generous gap: 100px base + up to 100px of organic variation
+          tH[ti] += itemH + 100 + Math.round(Math.abs(Math.sin(i * 1.8 + 1.2)) * 100);
         });
-        container.style.height = (Math.max(...tH) + 80) + 'px';
+        container.style.height = (Math.max(...tH) + 160) + 'px';
       }
 
-      // Scroll-triggered fade-in
-      const obs = new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-          if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
-        });
-      }, { threshold: 0.04 });
-      container.querySelectorAll('.gallery-item').forEach(el => obs.observe(el));
+      // Re-run once after images load to use correct naturalWidth/Height ratios
+      if (!isRelayout) {
+        const imgs = container.querySelectorAll('.gallery-item img');
+        let pending = [...imgs].filter(img => !img.complete || img.naturalWidth === 0);
+        if (pending.length > 0) {
+          let relaidOut = false;
+          pending.forEach(img => img.addEventListener('load', () => {
+            pending = pending.filter(x => x !== img);
+            if (!relaidOut && pending.length === 0) {
+              relaidOut = true;
+              layoutScrapbook(media, container, true);
+            }
+          }, { once: true }));
+          // Safety fallback: re-layout after 1.5s even if some images stall
+          setTimeout(() => { if (!relaidOut) { relaidOut = true; layoutScrapbook(media, container, true); } }, 1500);
+        }
+
+        // Scroll-triggered fade-in (only set up once)
+        const obs = new IntersectionObserver((entries) => {
+          entries.forEach(e => {
+            if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+          });
+        }, { threshold: 0.04 });
+        container.querySelectorAll('.gallery-item').forEach(el => obs.observe(el));
+      }
     }
 
     // Run after paint; retry once if layout hasn't happened yet
