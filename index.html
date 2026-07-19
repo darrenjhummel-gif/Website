@@ -1127,13 +1127,15 @@ function renderProject(slug) {
       const EDITOR_W = 900;
       const scale    = W / EDITOR_W;
 
-      // Use actual loaded image dimensions when available; fall back to picsum pattern or 1.5
+      // Use actual loaded image dimensions when available; fall back to picsum pattern or 0.75.
+      // 0.75 is intentionally tall — it over-estimates height for both portrait and landscape,
+      // so the initial pass never causes overlap before images have loaded.
       function getItemRatio(i, src) {
         const el = document.getElementById('gi-' + i);
         const img = el && el.querySelector('img');
         if (img && img.naturalWidth > 0) return img.naturalWidth / img.naturalHeight;
         const m = src.match(/\/(\d+)\/(\d+)$/);
-        return m ? parseInt(m[1]) / parseInt(m[2]) : 1.5;
+        return m ? parseInt(m[1]) / parseInt(m[2]) : 0.75;
       }
 
       const hasCustomLayout = media.length > 0 && media[0].pos;
@@ -1161,14 +1163,15 @@ function renderProject(slug) {
 
       } else {
         // ── Auto two-track algorithm ──────────────────────────────
-        const TRACK_GAP = 64;
-        const lW = Math.round(W * 0.41);
-        const rW = Math.round(W * 0.45);
+        const TRACK_GAP = 80;
+        const lW = Math.round(W * 0.36);
+        const rW = Math.round(W * 0.40);
         const rL = lW + TRACK_GAP;
         const tracks = [{ w: lW, l: 0 }, { w: rW, l: rL }];
-        // Start tracks staggered so they interleave nicely
-        const tH     = [100, 260];
-        const sizes   = [0.90, 0.62, 0.82, 0.54, 0.94, 0.70, 0.58, 0.86, 0.76, 0.50];
+        // Start tracks staggered
+        const tH     = [80, 280];
+        // Smaller photos — max ~70% of already-narrow track
+        const sizes   = [0.68, 0.44, 0.60, 0.36, 0.70, 0.50, 0.40, 0.64, 0.54, 0.34];
         const offsets = [0.00, 0.08, 0.03, 0.12, 0.01, 0.10, 0.06, 0.14, 0.03, 0.09];
 
         media.forEach((item, i) => {
@@ -1176,8 +1179,10 @@ function renderProject(slug) {
           const t     = tracks[ti];
           const itemW = Math.round(t.w * sizes[i % sizes.length]);
           const itemL = Math.round(t.l + t.w * offsets[i % offsets.length]);
+          // Default ratio 0.75 — intentionally tall — so we over-estimate height
+          // for both portrait AND landscape shots, preventing overlap before images load.
           const ratio = getItemRatio(i, item.src);
-          const itemH = Math.round(itemW / ratio);
+          const itemH = Math.round(itemW / (ratio || 0.75));
 
           const el = document.getElementById('gi-' + i);
           if (el) {
@@ -1186,10 +1191,10 @@ function renderProject(slug) {
             el.style.top    = tH[ti] + 'px';
             el.style.zIndex = 1;
           }
-          // Generous gap: 100px base + up to 100px of organic variation
-          tH[ti] += itemH + 100 + Math.round(Math.abs(Math.sin(i * 1.8 + 1.2)) * 100);
+          // Generous gap: 160px base + up to 140px organic variation
+          tH[ti] += itemH + 160 + Math.round(Math.abs(Math.sin(i * 1.8 + 1.2)) * 140);
         });
-        container.style.height = (Math.max(...tH) + 160) + 'px';
+        container.style.height = (Math.max(...tH) + 200) + 'px';
       }
 
       // Re-run once after images load to use correct naturalWidth/Height ratios
