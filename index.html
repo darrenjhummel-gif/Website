@@ -713,6 +713,7 @@
     .gallery-item {
       position: absolute;
       overflow: hidden;
+      transform-origin: center center;
       opacity: 0;
       transform: translateY(10px);
       transition: opacity 0.85s ease, transform 0.85s ease;
@@ -1169,39 +1170,42 @@ function renderProject(slug) {
         container.style.height = (maxBottom + 120) + 'px';
 
       } else {
-        // ── Auto two-track algorithm ──────────────────────────────
-        const TRACK_GAP = 80;
-        const lW = Math.round(W * 0.36);
-        const rW = Math.round(W * 0.40);
-        const rL = lW + TRACK_GAP;
-        const tracks = [{ w: lW, l: 0 }, { w: rW, l: rL }];
-        // Start tracks staggered
-        const tH     = [40, 160];
-        // Small photos — Brook Pifer scale
-        const sizes   = [0.42, 0.26, 0.36, 0.20, 0.44, 0.30, 0.24, 0.40, 0.32, 0.18];
-        const offsets = [0.00, 0.08, 0.03, 0.12, 0.01, 0.10, 0.06, 0.14, 0.03, 0.09];
+        // ── Scrapbook layout: big photos, intentional overlap, subtle rotation ──
+        // Two columns that share a wide overlap zone in the middle.
+        const LEFT_W  = Math.round(W * 0.52);
+        const RIGHT_W = Math.round(W * 0.50);
+        const RIGHT_L = Math.round(W * 0.36);   // right col starts at 36% → 14% shared zone
+        const tracks  = [{ w: LEFT_W, l: 0 }, { w: RIGHT_W, l: RIGHT_L }];
+        const tH      = [40, 200];               // staggered starts
+
+        // Sizes as fraction of column width: mix of large, medium, small
+        const SIZES    = [0.88, 0.58, 0.78, 0.50, 0.92, 0.66, 0.54, 0.84, 0.70, 0.46];
+        // Small horizontal nudge so photos aren't all flush-left within their column
+        const X_OFF    = [0.00, 0.07, -0.02, 0.10, 0.01, 0.08, -0.04, 0.05, 0.02, 0.09];
+        // Subtle rotation — gives that "laid on a table" feel
+        const ROTS     = [0.8, -1.4, 1.9, -0.7, 1.3, -1.8, 0.5, -1.1, 2.1, -0.9];
 
         media.forEach((item, i) => {
           const ti    = tH[0] <= tH[1] ? 0 : 1;
           const t     = tracks[ti];
-          const itemW = Math.round(t.w * sizes[i % sizes.length]);
-          const itemL = Math.round(t.l + t.w * offsets[i % offsets.length]);
-          // Default ratio 0.75 — intentionally tall — so we over-estimate height
-          // for both portrait AND landscape shots, preventing overlap before images load.
+          const itemW = Math.round(t.w * SIZES[i % SIZES.length]);
+          const itemL = Math.max(0, t.l + Math.round(t.w * X_OFF[i % X_OFF.length]));
+          const rot   = ROTS[i % ROTS.length];
           const ratio = getItemRatio(i, item.src);
           const itemH = Math.round(itemW / (ratio || 0.75));
 
           const el = document.getElementById('gi-' + i);
           if (el) {
-            el.style.width  = itemW + 'px';
-            el.style.left   = itemL + 'px';
-            el.style.top    = tH[ti] + 'px';
-            el.style.zIndex = 1;
+            el.style.width     = itemW + 'px';
+            el.style.left      = itemL + 'px';
+            el.style.top       = tH[ti] + 'px';
+            el.style.transform = `rotate(${rot}deg)`;
+            el.style.zIndex    = i + 1;         // each photo stacks on top of previous
           }
-          // Gap: 55px base + up to 70px organic variation
-          tH[ti] += itemH + 55 + Math.round(Math.abs(Math.sin(i * 1.8 + 1.2)) * 70);
+          // Advance by 80% of height = intentional 20% overlap between photos in same column
+          tH[ti] += Math.round(itemH * 0.80) + 20;
         });
-        container.style.height = (Math.max(...tH) + 100) + 'px';
+        container.style.height = (Math.max(...tH) + 120) + 'px';
       }
 
       // Re-run once after images load to use correct naturalWidth/Height ratios
