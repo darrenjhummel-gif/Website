@@ -72,7 +72,7 @@ function renderMagic() {
   const visibility=()=>syncLoops();document.addEventListener('visibilitychange',visibility);
   const motionChange=()=>{paused=reduced.matches;root.classList.toggle('magic-animated',!reduced.matches);syncLoops();};reduced.addEventListener('change',motionChange);
   const extraVideos=[...root.querySelectorAll('.magic-extra video')];
-  const pauseExtras=e=>{if(e.target.tagName==='VIDEO') {loops.forEach(v=>v.pause());extraVideos.forEach(v=>{if(v!==e.target)v.pause();});}};
+  const pauseExtras=e=>{if(extraVideos.includes(e.target)) {loops.forEach(v=>v.pause());extraVideos.forEach(v=>{if(v!==e.target)v.pause();});}};
   root.addEventListener('play',pauseExtras,true);
   syncLoops();
   disposeMagic=()=>{disposed=true;root.removeEventListener('play',pauseExtras,true);extraVideos.forEach(v=>{v.pause();v.removeAttribute('src');v.load();});document.body.classList.remove('magic-mode','magic-paused');loopObserver.disconnect();revealObserver.disconnect();loops.forEach(v=>{v.pause();v.removeAttribute('src');v.load();});player.pause();if(dialog.open)dialog.close();document.body.style.overflow='';document.removeEventListener('visibilitychange',visibility);reduced.removeEventListener('change',motionChange);disposeMagic=()=>{};};
