@@ -1304,10 +1304,10 @@ const PROJECTS = [
         {
           "title": "From the Archives",
           "description": "A few early experiments, filmed at home and shared with friends.",
-          "src": "assets/magic/where-wonder-began.mp4",
-          "loop": "assets/magic/where-wonder-began-loop.mp4",
-          "poster": "assets/magic/where-wonder-began.jpg",
-          "length": "0:46",
+          "src": "assets/magic/from-archives-darren-edit.mp4",
+          "loop": "assets/magic/from-archives-darren-edit-loop.mp4",
+          "poster": "assets/magic/from-archives-darren-edit.jpg",
+          "length": "1:07",
           "portrait": false
         }
       ],
