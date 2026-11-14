@@ -825,6 +825,8 @@
     }
 
   </style>
+  <link rel="stylesheet" href="magic.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ctext y=%2726%27 font-size=%2728%27%3E✦%3C/text%3E%3C/svg%3E">
 </head>
 <body>
 
@@ -877,6 +879,8 @@
 
 
 <script src="data.js"></script>
+<script src="magic-data.js"></script>
+<script src="magic.js"></script>
 <script>
 // ================================================================
 //  ROUTER + RENDERER  (data lives in data.js)
@@ -1439,6 +1443,7 @@ function navHtml(prev, next) {
 // ---- ROUTER ----
 
 function handleRoute() {
+  disposeMagic();
   const hash = window.location.hash.replace('#', '') || '/';
   window.scrollTo(0, 0);
 
@@ -1448,6 +1453,7 @@ function handleRoute() {
 
   requestAnimationFrame(() => {
     if (hash === '/' || hash === '') renderHome();
+    else if (hash === '/Magic') renderMagic();
     else if (hash === '/Information')  renderInfo();
     else                               renderProject(hash.replace('/', ''));
 
