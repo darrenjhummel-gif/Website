@@ -1240,16 +1240,16 @@ const PROJECTS = [
     "title": "Magic",
     "credits": null,
     "description": [
-      "A deck of cards, a few curious people, and that split second when everything stops making sense. Here are a few of those moments—from gatherings with friends to a look back at where it all began."
+      "Magic gives us a reason to look up, lean in, and share a moment. I love that split second when something ordinary challenges what we think we know—and suddenly, anything feels possible."
     ],
     "media": [],
     "magic": {
-      "intro": "A deck of cards, a few curious people, and that split second when everything stops making sense. Here are a few of those moments—from gatherings with friends to a look back at where it all began.",
-      "archiveText": "Long before these performances, there was a camera at home and another trick to try. A small piece of that home-video archive lives here, grain and all.",
+      "intro": "Magic gives us a reason to look up, lean in, and share a moment. I love that split second when something ordinary challenges what we think we know—and suddenly, anything feels possible.",
+      "archiveText": "I first felt that sense of wonder when I was still in single digits. I stole my parents’ camera, grabbed a deck of cards, and started filming. The footage is a little embarrassing—but hey, you’ve gotta start somewhere.",
       "films": [
         {
           "title": "A seat at the table",
-          "description": "A close-up performance, and a table full of reactions.",
+          "description": "A few people around a table. A moment that belongs to everyone.",
           "src": "assets/magic/at-the-table.mp4",
           "loop": "assets/magic/at-the-table-loop.mp4",
           "poster": "assets/magic/at-the-table.jpg",
@@ -1258,7 +1258,7 @@ const PROJECTS = [
         },
         {
           "title": "Right in their hands",
-          "description": "The best seat is sometimes right in the middle of it.",
+          "description": "That look when the impossible happens right in your hands.",
           "src": "assets/magic/in-their-hands.mp4",
           "loop": "assets/magic/in-their-hands-loop.mp4",
           "poster": "assets/magic/in-their-hands.jpg",
@@ -1267,7 +1267,7 @@ const PROJECTS = [
         },
         {
           "title": "Out in the open",
-          "description": "A little sleight of hand in the fresh air.",
+          "description": "No stage needed. Just a little curiosity and someone to share it with.",
           "src": "assets/magic/out-in-the-open.mp4",
           "loop": "assets/magic/out-in-the-open-loop.mp4",
           "poster": "assets/magic/out-in-the-open.jpg",
@@ -1276,7 +1276,7 @@ const PROJECTS = [
         },
         {
           "title": "Among friends",
-          "description": "A living room, a deck of cards, and good company.",
+          "description": "Familiar faces, a deck of cards, and a reason to look twice.",
           "src": "assets/magic/among-friends.mp4",
           "loop": "assets/magic/among-friends-loop.mp4",
           "poster": "assets/magic/among-friends.jpg",
@@ -1285,7 +1285,7 @@ const PROJECTS = [
         },
         {
           "title": "After dark",
-          "description": "Close-up magic in the middle of the party.",
+          "description": "The conversation pauses. Everyone leans in.",
           "src": "assets/magic/after-dark.mp4",
           "loop": "assets/magic/after-dark-loop.mp4",
           "poster": "assets/magic/after-dark.jpg",
@@ -1294,7 +1294,7 @@ const PROJECTS = [
         },
         {
           "title": "A little magic",
-          "description": "A quick glimpse of It's Magic with Darren.",
+          "description": "A quick glimpse into It's Magic with Darren Hummel.",
           "src": "assets/magic/a-little-magic.mp4",
           "loop": "assets/magic/a-little-magic-loop.mp4",
           "poster": "assets/magic/a-little-magic.jpg",
@@ -1302,12 +1302,12 @@ const PROJECTS = [
           "portrait": true
         },
         {
-          "title": "The early days",
-          "description": "An early home recording. The curiosity was already there.",
-          "src": "assets/magic/the-early-days.mp4",
-          "loop": "assets/magic/the-early-days-loop.mp4",
-          "poster": "assets/magic/the-early-days.jpg",
-          "length": "2:09",
+          "title": "From the Archives",
+          "description": "A few early experiments, filmed at home and shared with friends.",
+          "src": "assets/magic/where-wonder-began.mp4",
+          "loop": "assets/magic/where-wonder-began-loop.mp4",
+          "poster": "assets/magic/where-wonder-began.jpg",
+          "length": "0:46",
           "portrait": false
         }
       ],
